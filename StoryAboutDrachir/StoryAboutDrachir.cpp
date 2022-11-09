@@ -4,5 +4,5 @@ using namespace std;
 
 int main()
 {
-    cout << "Branch test commit";
+    cout << "Merge test commit";
 }
