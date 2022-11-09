@@ -63,7 +63,7 @@ public:
 	}
 };
 
-class Start { // start
+class Start { // старт
 public:
 	Start() {}
 
@@ -86,7 +86,7 @@ public:
 	}
 };
 
-class Info { // info
+class Info { // мудрец
 public:
 	Info() {}
 
@@ -127,10 +127,23 @@ public:
 	}
 };
 
-class Enemy {
+class Enemy { // враг
 private:
+	int strong;
+	string loot;
+	
+public:
+	Enemy() {}
 
-}
+	int attack(int hero_strong, int enemy_strong) {
+		double win_chance_percent = (hero_strong / enemy_strong) * 100;
+		win_chance_percent = (int)win_chance_percent;
+		if (win_chance_percent < rand() % 100) return 1;
+		else return 0;
+	}
+};
+
+
 
 int main() {
 	setlocale(LC_ALL, "Russian");
