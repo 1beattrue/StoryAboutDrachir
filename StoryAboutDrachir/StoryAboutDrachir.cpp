@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <map>
+#include <conio.h>
 using namespace std;
 
 class Hero {
@@ -67,6 +68,7 @@ private:
 									{"sphinx", 4}, {"traveler", 5},
 									{"demon", 6},  {"witch", 7}, 
 									{"boss", 8},   {"finish", 9} };
+
 public:
 	Map(string loc) {
 		
@@ -111,8 +113,39 @@ public:
 	}
 };
 
+class Game {
+private:
+	bool alive = true;
 
-int main()
-{
-	Hero Drachir(3, 0, 0, 0, "start");
+public:
+	Game(Hero hero) {
+		if (hero.getHealth() < 1) this->alive = false;
+	}
+
+	bool isAlive() {
+		return alive;
+	}
+};
+
+int main() {
+	setlocale(LC_ALL, "Russian");
+	Hero Drachir(0, 0, 0, 0, "start");
+	Game game(Drachir);
+	
+	restart:
+	while (game.isAlive()) {
+		cout << "Вы живы" << endl;
+	}
+
+	cout << "Увы, Драчир пал смертью храбрых.\nХотите начать заново? Нажмите Enter\nХотите завершить игру? Нажмите Esc" << endl;
+	while (true) {
+		switch (_getch())
+		{
+		case 13:
+			goto restart;
+			break;
+		case 27:
+			exit(0);
+		}
+	}
 }
