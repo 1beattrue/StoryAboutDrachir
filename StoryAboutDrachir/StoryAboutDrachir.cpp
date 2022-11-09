@@ -52,7 +52,7 @@ public:
 		return endurance;
 	}
 
-	void setLocation(int loc) { // изменение локации
+	void setLocation(string loc) { // изменение локации
 		location = loc;
 	}
 
@@ -61,86 +61,83 @@ public:
 	}
 };
 
-class Map {
-private:
-	map <string, int> locations = { {"start", 0},  {"info", 1}, 
-									{"imp", 2},    {"elf", 3},
-									{"sphinx", 4}, {"traveler", 5},
-									{"demon", 6},  {"witch", 7}, 
-									{"boss", 8},   {"finish", 9} };
-
+class Start {
 public:
-	Map(string loc) {
-		
+	Start() {}
+
+	void gameDescription() {
+		cout << "game description" << endl;
 	}
 
-	void moveToLocation(string loc) {
-		switch (locations[loc]) {
-		case 0:
-			// переход в локацию старт
-			break;
-		case 1:
-			// переход в локацию инфо
-			break;
-		case 2:
-			// переход в локацию импа
-			break;
-		case 3:
-			// переход в локацию эльфа
-			break;
-		case 4:
-			// переход в локацию сфинкса
-			break;
-		case 5:
-			// переход в локацию путника
-			break;
-		case 6:
-			// переход в локацию демона
-			break;
-		case 7:
-			// переход в локацию волшебницы
-			break;
-		case 8:
-			// переход в локацию сатаны
-			break;
-		case 9:
-			// переход в локацию финиш
-			break;
-		default:
-			cout << "Драчир: Не-е, туда я не пойду";
-			break;
+	string moveTo() {
+		cout << "Нажмите 1, чтобы пойти к мудрецу" << endl;
+		while (true) {
+			switch (_getch()) {
+			case 49:
+				return "info";
+				break;
+			default:
+				cout << "Каво?" << endl;
+				break;
+			}
 		}
-	}
-};
-
-class Game {
-private:
-	bool alive = true;
-
-public:
-	Game(Hero hero) {
-		if (hero.getHealth() < 1) this->alive = false;
-	}
-
-	bool isAlive() {
-		return alive;
 	}
 };
 
 int main() {
 	setlocale(LC_ALL, "Russian");
-	Hero Drachir(0, 0, 0, 0, "start");
-	Game game(Drachir);
-	
+
+	map <string, int> locations = { {"start", 0},  {"info", 1},
+									{"imp", 2},    {"elf", 3},
+									{"sphinx", 4}, {"traveler", 5},
+									{"demon", 6},  {"witch", 7},
+									{"boss", 8},   {"finish", 9} };
+
+	Hero Drachir(3, 0, 0, 0, "start");
+	Start start;
+
 	restart:
-	while (game.isAlive()) {
-		cout << "Вы живы" << endl;
+	while (Drachir.getHealth() > 0) {
+		switch (locations[Drachir.getLocation()]) {
+			case 0:
+				// переход в локацию старт
+				start.gameDescription();
+				Drachir.setLocation(start.moveTo());
+				break;
+			case 1:
+				cout << "1";
+				// переход в локацию инфо
+				break;
+			case 2:
+				// переход в локацию импа
+				break;
+			case 3:
+				// переход в локацию эльфа
+				break;
+			case 4:
+				// переход в локацию сфинкса
+				break;
+			case 5:
+				// переход в локацию путника
+				break;
+			case 6:
+				// переход в локацию демона
+				break;
+			case 7:
+				// переход в локацию волшебницы
+				break;
+			case 8:
+				// переход в локацию сатаны
+				break;
+			case 9:
+				// переход в локацию финиш
+				break;
+		}
 	}
 
 	cout << "Увы, Драчир пал смертью храбрых.\nХотите начать заново? Нажмите Enter\nХотите завершить игру? Нажмите Esc" << endl;
 	while (true) {
-		switch (_getch())
-		{
+		switch (_getch()) {
 		case 13:
 			goto restart;
 			break;
