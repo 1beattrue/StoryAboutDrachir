@@ -1,6 +1,8 @@
 ﻿#include <iostream>
 #include <map>
 #include <conio.h>
+#include <fstream>
+#include <string>
 using namespace std;
 
 class Hero {
@@ -61,20 +63,61 @@ public:
 	}
 };
 
-class Start {
+class Start { // start
 public:
 	Start() {}
 
 	void gameDescription() {
-		cout << "game description" << endl;
+		ifstream fin("gameDescription.txt");
+		string s;
+		while (getline(fin, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		fin.close();
+	}
+};
+
+class Info { // info
+public:
+	Info() {}
+
+	void dialog() {
+		ifstream fin1("infoDialog.txt");
+		string s;
+		while (getline(fin1, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		fin1.close();
 	}
 
 	string moveTo() {
-		cout << "Нажмите 1, чтобы пойти к мудрецу" << endl;
+		cout << "Нажмите 1, чтобы пойти к импу" << endl;
+		cout << "Нажмите 2, чтобы пойти к бандитам" << endl;
 		while (true) {
 			switch (_getch()) {
 			case 49:
-				return "info";
+				return "imp";
+				break;
+			case 50:
+				return "elf";
 				break;
 			default:
 				cout << "Каво?" << endl;
@@ -83,6 +126,11 @@ public:
 		}
 	}
 };
+
+class Enemy {
+private:
+
+}
 
 int main() {
 	setlocale(LC_ALL, "Russian");
@@ -95,6 +143,7 @@ int main() {
 
 	Hero Drachir(3, 0, 0, 0, "start");
 	Start start;
+	Info info;
 
 	restart:
 	while (Drachir.getHealth() > 0) {
@@ -102,13 +151,15 @@ int main() {
 			case 0:
 				// переход в локацию старт
 				start.gameDescription();
-				Drachir.setLocation(start.moveTo());
+				Drachir.setLocation("info");
 				break;
 			case 1:
-				cout << "1";
 				// переход в локацию инфо
+				info.dialog();
+				Drachir.setLocation(info.moveTo());
 				break;
 			case 2:
+				cout << _getch();
 				// переход в локацию импа
 				break;
 			case 3:
