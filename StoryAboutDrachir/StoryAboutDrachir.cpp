@@ -393,7 +393,11 @@ public:
 
 
 int powerOfHero(vector <string> arg) {
-	map <string, int> items = { {"full of holes chain armor", 5}, {"rusty poleaxe", 5}, {"imp's pitchfork", 20}, {"silver sword", 50}, {"demon armor", 50} };
+	map <string, int> items = { {"full of holes chain armor", 5},
+								{"rusty poleaxe", 5},
+								{"imp's pitchfork", 20},
+								{"silver sword", 50},
+								{"demon armor", 50} };
 	int p = 0;
 	cout << "Ваш инвентарь:" << endl;
 	for (string x : arg) {
