@@ -342,6 +342,56 @@ public:
 	}
 };
 
+class Demon : public Enemy { // имп
+public:
+	Demon(int pow, string item, bool visit, bool alive) {
+		this->strong = pow;
+		this->loot = item;
+		this->visited = visit;
+		this->alive = alive;
+	}
+
+	void dialog(bool visit) {
+		if (!visit) {
+			cout << "я демон" << endl;
+		}
+		else {
+			cout << "я демон и ты уже был здесь" << endl;
+		}
+	}
+
+	void deadDemon() {
+		cout << "я мертвый демон" << endl;
+	}
+
+	string moveTo() {
+		cout << "Нажмите 1, чтобы вернуться к мудрецу" << endl;
+		cout << "Нажмите 2, чтобы пойти вперед" << endl;
+		cout << "Нажмите 3, чтобы пойти направо" << endl;
+		cout << "Нажмите 4, чтобы пойти назад" << endl;
+		while (true) {
+			switch (_getch()) {
+			case 49:
+				return "info";
+				break;
+			case 50:
+				return "boss";
+				break;
+			case 51:
+				return "witch";
+				break;
+			case 52:
+				return "sphinx";
+				break;
+			default:
+				cout << "Каво?" << endl;
+				break;
+			}
+		}
+	}
+};
+
+
 int powerOfHero(vector <string> arg) {
 	map <string, int> items = { {"full of holes chain armor", 5}, {"rusty poleaxe", 5}, {"imp's pitchfork", 20}, {"silver sword", 50}, {"demon armor", 50} };
 	int p = 0;
@@ -366,13 +416,12 @@ int main() {
 									{"demon", 6},  {"witch", 7},
 									{"boss", 8},   {"finish", 9} };
 
-	
-
 	Hero Drachir(5, 0, 0, 0, "start", {});
 	Start start;
 	Info info;
 	Imp imp(9, "imp's pitchfork", false, true);
 	Sphinx sphinx(300, "silver sword", false, true);
+	Demon demon(79, "demon armor", false, true);
 	
 	while (Drachir.getHealth() > 0) {
 		switch (locations[Drachir.getLocation()]) {
@@ -442,27 +491,42 @@ int main() {
 					break;
 				}
 			}
-			else {
-				sphinx.deadSphinx();
-			}
+			else sphinx.deadSphinx();
 			if (Drachir.getHealth() == 0) break;
 			Drachir.setLocation(sphinx.moveTo());
 			break;
 		case 5:
 			// переход в локацию путника
+			cout << "traveler";
 			break;
 		case 6:
 			// переход в локацию демона
-			cout << "demon";
+			if (demon.getAlive()) {
+				demon.dialog(demon.getVisited());
+				demon.setVisited(true);
+				int battle = demon.attack(Drachir.getStrong(), demon.getStrong());
+				Drachir.setHealth(Drachir.getHealth() - battle);
+				if (battle == 0) {
+					demon.setAlive(false);
+					Drachir.addItemToInventory(demon.getLoot());
+					Drachir.setStrong(powerOfHero(Drachir.getInventory()));
+				}
+			}
+			else demon.deadDemon();
+			if (Drachir.getHealth() == 0) break;
+			Drachir.setLocation(demon.moveTo());
 			break;
 		case 7:
 			// переход в локацию волшебницы
+			cout << "witch";
 			break;
 		case 8:
 			// переход в локацию сатаны
+			cout << "boss";
 			break;
 		case 9:
 			// переход в локацию финиш
+			cout << "finish";
 			break;
 		}
 	}
