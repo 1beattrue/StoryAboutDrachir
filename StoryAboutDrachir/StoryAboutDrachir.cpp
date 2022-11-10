@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <fstream>
 #include <string>
+#include <vector>
 using namespace std;
 
 class Hero {
@@ -12,14 +13,16 @@ private:
 	int strong;
 	int endurance;
 	string location;
+	vector <string> inventory;
 
 public:
-	Hero(int hp, int rep, int pow, int end, string loc) { // конструктор 
+	Hero(int hp, int rep, int pow, int end, string loc, vector <string> items) { // конструктор 
 		this->health = hp;
 		this->reputation = rep;
 		this->strong = pow;
 		this->endurance = end;
 		this->location = loc;
+		this->inventory = items;
 	}
 
 	void setHealth(int hp) { // изменение здоровья
@@ -60,6 +63,14 @@ public:
 
 	string getLocation() { // получение локации
 		return location;
+	}
+
+	void addItemToInventory(string item) { // добавление предмета
+		inventory.push_back(item);
+	}
+
+	vector <string> getInventory() { // получение инвентаря
+		return inventory;
 	}
 };
 
@@ -138,11 +149,11 @@ public:
 	Enemy() {}
 
 	int attack(int hero_strong, int enemy_strong) {
-		double win_chance_percent = (hero_strong / enemy_strong) * 100;
+		double win_chance_percent = ((double)hero_strong / enemy_strong) * 100;
 		win_chance_percent = (int)win_chance_percent;
 		int rnd = rand() % 100;
-		cout << win_chance_percent;
-		cout << rnd;
+		cout << win_chance_percent << endl;
+		cout << rnd << endl;
 		if (win_chance_percent < rnd) return 1;
 		else return 0;
 	}
@@ -176,7 +187,7 @@ public:
 	}
 };
 
-class Imp : public Enemy {
+class Imp : public Enemy { // имп
 public: 
 	Imp(int pow, string item, bool visit, bool alive) {
 		this->strong = pow;
@@ -216,18 +227,33 @@ public:
 	}
 };
 
+int powerOfHero(vector <string> arg) {
+	map <string, int> items = { {"full of holes chain armor", 5}, {"rusty poleaxe", 5}, {"imp's pitchfork", 20}, {"silver sword", 50}, {"demon armor", 50} };
+	int p = 0;
+	cout << "Ваш инвентарь:" << endl;
+	for (string x : arg) {
+		p += items[x];
+		cout << x << endl;
+	}
+	cout << "сила = " << p << endl;
+	return p;
+}
+
 int main() {
 	setlocale(LC_ALL, "Russian");
 
 	restart:
-	for (int i = 0; i < 100; i++) cout << "\n\n\n\n\n"; // костыль для очистки консоли
-	map <string, int> locations = { {"start", 0},  {"info", 1},
+	// for (int i = 0; i < 100; i++) cout << "\n\n\n\n\n"; // костыль для очистки консоли
+	
+	map <string, int> locations = { {"start", 0},  {"info", 1},     // карта 
 									{"imp", 2},    {"elf", 3},
 									{"sphinx", 4}, {"traveler", 5},
 									{"demon", 6},  {"witch", 7},
 									{"boss", 8},   {"finish", 9} };
 
-	Hero Drachir(1, 0, 8, 0, "start");
+	
+
+	Hero Drachir(1, 0, 0, 0, "start", {});
 	Start start;
 	Info info;
 	Imp imp(9, "imp's pitchfork", false, true);
@@ -238,6 +264,9 @@ int main() {
 			case 0:
 				// переход в локацию старт
 				start.gameDescription();
+				Drachir.addItemToInventory("full of holes chain armor");
+				Drachir.addItemToInventory("rusty poleaxe");
+				Drachir.setStrong(powerOfHero(Drachir.getInventory()));
 				Drachir.setLocation("info");
 				break;
 			case 1:
@@ -253,6 +282,8 @@ int main() {
 					Drachir.setHealth(Drachir.getHealth() - imp.attack(Drachir.getStrong(), imp.getStrong()));
 					if (Drachir.getHealth() == 0) break;
 					imp.setAlive(false);
+					Drachir.addItemToInventory(imp.getLoot());
+					Drachir.setStrong(powerOfHero(Drachir.getInventory()));
 				}
 				else {
 					if (imp.getAlive() == false)imp.deadImp();
