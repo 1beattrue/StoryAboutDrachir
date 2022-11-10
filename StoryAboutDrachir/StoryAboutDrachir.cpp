@@ -154,8 +154,14 @@ public:
 		int rnd = rand() % 100;
 		cout << win_chance_percent << endl;
 		cout << rnd << endl;
-		if (win_chance_percent < rnd) return 1;
-		else return 0;
+		if (win_chance_percent < rnd) {
+			cout << "поражение" << endl;
+			return 1;
+		}
+		else {
+			cout << "победа" << endl;
+			return 0;
+		}
 	}
 
 	int getStrong() {
@@ -227,6 +233,74 @@ public:
 	}
 };
 
+class Sphinx : public Enemy { // имп
+public:
+	Sphinx(int pow, string item, bool visit, bool alive) {
+		this->strong = pow;
+		this->loot = item;
+		this->visited = visit;
+		this->alive = alive;
+	}
+
+	void dialog(bool visit) {
+		if (!visit) {
+			cout << "я сфинкс" << endl;
+		}
+		else {
+			cout << "я сфинкс и ты уже был здесь" << endl;
+		}
+	}
+
+	int choice() {
+		cout << "Отгадать загадки или убить?" << endl;
+		cout << "Нажмите 1, чтобы начать отгадывать загадки" << endl;
+		cout << "Нажмите 2, чтобы попытаться убить Сфинкса" << endl;
+		while (true) {
+			switch (_getch()) {
+			case 49:
+				return 1;
+				break;
+			case 50:
+				return 2;
+				break;
+			default:
+				cout << "Каво?" << endl;
+				break;
+			}
+		}
+	}
+
+	void deadSphinx() {
+		cout << "я мертвый сфинкс" << endl;
+	}
+
+	string moveTo() {
+		cout << "Нажмите 1, чтобы вернуться к мудрецу" << endl;
+		cout << "Нажмите 2, чтобы пойти вперед" << endl;
+		cout << "Нажмите 3, чтобы пойти направо" << endl;
+		cout << "Нажмите 4, чтобы пойти назад" << endl;
+		while (true) {
+			switch (_getch()) {
+			case 49:
+				return "info";
+				break;
+			case 50:
+				return "demon";
+				break;
+			case 51:
+				return "traveler";
+				break;
+			case 52:
+				return "imp";
+				break;
+			default:
+				cout << "Каво?" << endl;
+				break;
+			}
+		}
+	}
+};
+
 int powerOfHero(vector <string> arg) {
 	map <string, int> items = { {"full of holes chain armor", 5}, {"rusty poleaxe", 5}, {"imp's pitchfork", 20}, {"silver sword", 50}, {"demon armor", 50} };
 	int p = 0;
@@ -253,66 +327,88 @@ int main() {
 
 	
 
-	Hero Drachir(1, 0, 0, 0, "start", {});
+	Hero Drachir(3, 0, 0, 0, "start", {});
 	Start start;
 	Info info;
 	Imp imp(9, "imp's pitchfork", false, true);
-	imp.setAlive(true);
+	Sphinx sphinx(300, "silver sword", false, true);
 	
 	while (Drachir.getHealth() > 0) {
 		switch (locations[Drachir.getLocation()]) {
-			case 0:
-				// переход в локацию старт
-				start.gameDescription();
-				Drachir.addItemToInventory("full of holes chain armor");
-				Drachir.addItemToInventory("rusty poleaxe");
+		case 0:
+			// переход в локацию старт
+			start.gameDescription();
+			Drachir.addItemToInventory("full of holes chain armor");
+			Drachir.addItemToInventory("rusty poleaxe");
+			Drachir.setStrong(powerOfHero(Drachir.getInventory()));
+			Drachir.setLocation("info");
+			break;
+		case 1:
+			// переход в локацию инфо
+			info.dialog();
+			Drachir.setLocation(info.moveTo());
+			break;
+		case 2:
+			// переход в локацию импа
+			if (!imp.getVisited()) {
+				imp.dialog();
+				imp.setVisited(true);
+				Drachir.setHealth(Drachir.getHealth() - imp.attack(Drachir.getStrong(), imp.getStrong()));
+				if (Drachir.getHealth() == 0) break;
+				imp.setAlive(false);
+				Drachir.addItemToInventory(imp.getLoot());
 				Drachir.setStrong(powerOfHero(Drachir.getInventory()));
-				Drachir.setLocation("info");
-				break;
-			case 1:
-				// переход в локацию инфо
-				info.dialog();
-				Drachir.setLocation(info.moveTo());
-				break;
-			case 2:
-				// переход в локацию импа
-				if (!imp.getVisited()) {
-					imp.dialog();
-					imp.setVisited(true);
-					Drachir.setHealth(Drachir.getHealth() - imp.attack(Drachir.getStrong(), imp.getStrong()));
-					if (Drachir.getHealth() == 0) break;
-					imp.setAlive(false);
-					Drachir.addItemToInventory(imp.getLoot());
-					Drachir.setStrong(powerOfHero(Drachir.getInventory()));
+			}
+			else {
+				if (imp.getAlive() == false)imp.deadImp();
+			}
+			Drachir.setLocation(imp.moveTo());
+			break;
+		case 3:
+			cout << "elf";
+			// переход в локацию эльфа
+			break;
+		case 4:
+			// переход в локацию сфинкса
+			if (sphinx.getAlive()) {
+				sphinx.dialog(sphinx.getVisited());
+				sphinx.setVisited(true);
+				switch (sphinx.choice()) {
+				case 1:
+					cout << "aboba";
+					break;
+				case 2:
+					int battle = sphinx.attack(Drachir.getStrong(), sphinx.getStrong());
+					Drachir.setHealth(Drachir.getHealth() - battle);
+					if (battle == 0) {
+						sphinx.setAlive(false);
+						Drachir.addItemToInventory(sphinx.getLoot());
+						Drachir.setStrong(powerOfHero(Drachir.getInventory()));
+					}
+					break;
 				}
-				else {
-					if (imp.getAlive() == false)imp.deadImp();
-				}
-				Drachir.setLocation(imp.moveTo());
-				break;
-			case 3:
-				cout << "elf";
-				// переход в локацию эльфа
-				break;
-			case 4:
-				cout << "sphinx";
-				// переход в локацию сфинкса
-				break;
-			case 5:
-				// переход в локацию путника
-				break;
-			case 6:
-				// переход в локацию демона
-				break;
-			case 7:
-				// переход в локацию волшебницы
-				break;
-			case 8:
-				// переход в локацию сатаны
-				break;
-			case 9:
-				// переход в локацию финиш
-				break;
+			}
+			else {
+				sphinx.deadSphinx();
+			}
+			if (Drachir.getHealth() == 0) break;
+			Drachir.setLocation(sphinx.moveTo());
+			break;
+		case 5:
+			// переход в локацию путника
+			break;
+		case 6:
+			// переход в локацию демона
+			break;
+		case 7:
+			// переход в локацию волшебницы
+			break;
+		case 8:
+			// переход в локацию сатаны
+			break;
+		case 9:
+			// переход в локацию финиш
+			break;
 		}
 	}
 
