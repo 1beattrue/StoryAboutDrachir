@@ -81,8 +81,9 @@ public:
 	void gameDescription() {
 		ifstream fin("gameDescription.txt");
 		string s;
+		getline(fin, s);
+		cout << s << endl;
 		while (getline(fin, s)) {
-			cout << s << endl;
 			cout << "Нажмите space, чтобы продолжть" << endl;
 			bool flag = true;
 			while (flag) {
@@ -92,8 +93,38 @@ public:
 					break;
 				}
 			}
+			cout << s << endl;
 		}
 		fin.close();
+	}
+};
+
+class Finish { // старт
+private:
+	int ending;
+public:
+	Finish(int end) {
+		this->ending = end;
+	}
+
+	void gameEnding() {
+		ifstream fin_end("gameEnding.txt");
+		string s;
+		getline(fin_end, s);
+		cout << s << endl;
+		while (getline(fin_end, s)) {
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+			cout << s << endl;
+		}
+		fin_end.close();
 	}
 };
 
@@ -104,8 +135,9 @@ public:
 	void dialog() {
 		ifstream fin1("infoDialog.txt");
 		string s;
+		getline(fin1, s);
+		cout << s << endl;
 		while (getline(fin1, s)) {
-			cout << s << endl;
 			cout << "Нажмите space, чтобы продолжть" << endl;
 			bool flag = true;
 			while (flag) {
@@ -115,6 +147,7 @@ public:
 					break;
 				}
 			}
+			cout << s << endl;
 		}
 		fin1.close();
 	}
