@@ -290,8 +290,25 @@ public:
 	}
 
 	bool riddles() {
-		bool win = true;
-		return win;
+		cout << "Загадка 1 (ответ 1)" << endl;
+		string right_ans1 = "1";
+		string user_ans1;
+		cin >> user_ans1;
+		if (user_ans1 != right_ans1) return false;
+
+		cout << "Загадка 2 (ответ 2)" << endl;
+		string right_ans2 = "2";
+		string user_ans2;
+		cin >> user_ans2;
+		if (user_ans2 != right_ans2) return false;
+
+		cout << "Загадка 3 (ответ 3)" << endl;
+		string right_ans3 = "3";
+		string user_ans3;
+		cin >> user_ans3;
+		if (user_ans3 != right_ans3) return false;
+
+		return true;
 	}
 
 	void deadSphinx() {
@@ -351,7 +368,7 @@ int main() {
 
 	
 
-	Hero Drachir(2, 0, 0, 0, "start", {});
+	Hero Drachir(5, 0, 0, 0, "start", {});
 	Start start;
 	Info info;
 	Imp imp(9, "imp's pitchfork", false, true);
@@ -411,7 +428,7 @@ int main() {
 						Drachir.setStrong(powerOfHero(Drachir.getInventory()));
 					}
 					else {
-						cout << "лох";
+						cout << "лох" << endl;
 					}
 					break;
 				case 2:
@@ -436,6 +453,7 @@ int main() {
 			break;
 		case 6:
 			// переход в локацию демона
+			cout << "demon";
 			break;
 		case 7:
 			// переход в локацию волшебницы
