@@ -391,6 +391,115 @@ public:
 	}
 };
 
+class Witch : public Enemy { // имп
+public:
+	Witch(int pow, string item, bool visit, bool alive) {
+		this->strong = pow;
+		this->loot = item;
+		this->visited = visit;
+		this->alive = alive;
+	}
+
+	void dialog(bool visit) {
+		if (!visit) {
+			cout << "я ведьма" << endl;
+		}
+		else {
+			cout << "я ведьма и ты уже был здесь" << endl;
+		}
+	}
+
+	int choice1() {
+		cout << "Отгадать загадки или убить?" << endl;
+		cout << "Нажмите 1, чтобы начать отгадывать загадки" << endl;
+		cout << "Нажмите 2, чтобы убить Ведьму" << endl;
+		while (true) {
+			switch (_getch()) {
+			case 49:
+				return 1;
+				break;
+			case 50:
+				return 2;
+				break;
+			default:
+				cout << "Каво?" << endl;
+				break;
+			}
+		}
+	}
+
+	int choice2() {
+		cout << "Уйти или убить?" << endl;
+		cout << "Нажмите 1, чтобы уйти" << endl;
+		cout << "Нажмите 2, чтобы попытаться убить Ведьму" << endl;
+		while (true) {
+			switch (_getch()) {
+			case 49:
+				return 3;
+				break;
+			case 50:
+				return 2;
+				break;
+			default:
+				cout << "Каво?" << endl;
+				break;
+			}
+		}
+	}
+
+	bool riddles() {
+		cout << "Загадка 1 (ответ 1)" << endl;
+		string right_ans1 = "1";
+		string user_ans1;
+		cin >> user_ans1;
+		if (user_ans1 != right_ans1) return false;
+
+		cout << "Загадка 2 (ответ 2)" << endl;
+		string right_ans2 = "2";
+		string user_ans2;
+		cin >> user_ans2;
+		if (user_ans2 != right_ans2) return false;
+
+		cout << "Загадка 3 (ответ 3)" << endl;
+		string right_ans3 = "3";
+		string user_ans3;
+		cin >> user_ans3;
+		if (user_ans3 != right_ans3) return false;
+
+		return true;
+	}
+
+	void deadWitch() {
+		cout << "я мертвая ведьма" << endl;
+	}
+
+	string moveTo() {
+		cout << "Нажмите 1, чтобы вернуться к мудрецу" << endl;
+		cout << "Нажмите 2, чтобы пойти вперед" << endl;
+		cout << "Нажмите 3, чтобы пойти налево" << endl;
+		cout << "Нажмите 4, чтобы пойти назад" << endl;
+		while (true) {
+			switch (_getch()) {
+			case 49:
+				return "info";
+				break;
+			case 50:
+				return "boss";
+				break;
+			case 51:
+				return "demon";
+				break;
+			case 52:
+				return "traveler";
+				break;
+			default:
+				cout << "Каво?" << endl;
+				break;
+			}
+		}
+	}
+};
+
 
 int powerOfHero(vector <string> arg) {
 	map <string, int> items = { {"full of holes chain armor", 5},
@@ -426,6 +535,7 @@ int main() {
 	Imp imp(9, "imp's pitchfork", false, true);
 	Sphinx sphinx(300, "silver sword", false, true);
 	Demon demon(79, "demon armor", false, true);
+	Witch witch(1, "magic", false, true);
 	
 	while (Drachir.getHealth() > 0) {
 		switch (locations[Drachir.getLocation()]) {
@@ -522,7 +632,41 @@ int main() {
 			break;
 		case 7:
 			// переход в локацию волшебницы
-			cout << "witch";
+			if (witch.getAlive()) {
+				witch.dialog(witch.getVisited());
+				int choice;
+				if (!witch.getVisited()) {
+					witch.setVisited(true);
+					choice = witch.choice1();
+				}
+				else {
+					choice = witch.choice2();
+				}
+				switch (choice) {
+				case 1:
+					if (witch.riddles()) {
+						Drachir.addItemToInventory(witch.getLoot());
+						Drachir.setStrong(powerOfHero(Drachir.getInventory()));
+					}
+					else {
+						cout << "лох" << endl;
+					}
+					break;
+				case 2:
+					int battle = witch.attack(Drachir.getStrong(), witch.getStrong());
+					Drachir.setHealth(Drachir.getHealth() - battle);
+					if (battle == 0) {
+						witch.setAlive(false);
+						Drachir.addItemToInventory(witch.getLoot());
+						Drachir.setStrong(powerOfHero(Drachir.getInventory()));
+					}
+					break;
+				}
+			}
+			else witch.deadWitch();
+			if (Drachir.getHealth() == 0) break;
+			Drachir.setLocation(witch.moveTo());
+			break;
 			break;
 		case 8:
 			// переход в локацию сатаны
