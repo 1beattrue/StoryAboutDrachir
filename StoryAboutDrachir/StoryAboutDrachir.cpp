@@ -251,7 +251,7 @@ public:
 		}
 	}
 
-	int choice() {
+	int choice1() {
 		cout << "Отгадать загадки или убить?" << endl;
 		cout << "Нажмите 1, чтобы начать отгадывать загадки" << endl;
 		cout << "Нажмите 2, чтобы попытаться убить Сфинкса" << endl;
@@ -268,6 +268,30 @@ public:
 				break;
 			}
 		}
+	}
+
+	int choice2() {
+		cout << "Уйти или убить?" << endl;
+		cout << "Нажмите 1, чтобы уйти" << endl;
+		cout << "Нажмите 2, чтобы попытаться убить Сфинкса" << endl;
+		while (true) {
+			switch (_getch()) {
+			case 49:
+				return 3;
+				break;
+			case 50:
+				return 2;
+				break;
+			default:
+				cout << "Каво?" << endl;
+				break;
+			}
+		}
+	}
+
+	bool riddles() {
+		bool win = true;
+		return win;
 	}
 
 	void deadSphinx() {
@@ -327,7 +351,7 @@ int main() {
 
 	
 
-	Hero Drachir(3, 0, 0, 0, "start", {});
+	Hero Drachir(2, 0, 0, 0, "start", {});
 	Start start;
 	Info info;
 	Imp imp(9, "imp's pitchfork", false, true);
@@ -372,10 +396,23 @@ int main() {
 			// переход в локацию сфинкса
 			if (sphinx.getAlive()) {
 				sphinx.dialog(sphinx.getVisited());
-				sphinx.setVisited(true);
-				switch (sphinx.choice()) {
+				int choice;
+				if (!sphinx.getVisited()) {
+					sphinx.setVisited(true);
+					choice = sphinx.choice1();
+				}
+				else {
+					choice = sphinx.choice2();
+				}
+				switch (choice) {
 				case 1:
-					cout << "aboba";
+					if (sphinx.riddles()) {
+						Drachir.addItemToInventory(sphinx.getLoot());
+						Drachir.setStrong(powerOfHero(Drachir.getInventory()));
+					}
+					else {
+						cout << "лох";
+					}
 					break;
 				case 2:
 					int battle = sphinx.attack(Drachir.getStrong(), sphinx.getStrong());
