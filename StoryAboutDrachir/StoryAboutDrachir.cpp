@@ -109,8 +109,8 @@ public:
 	}
 
 	string moveTo() {
-		cout << "Нажмите 1, чтобы пойти к импу" << endl;
-		cout << "Нажмите 2, чтобы пойти к бандитам" << endl;
+		cout << "Нажмите 1, чтобы пойти налево" << endl;
+		cout << "Нажмите 2, чтобы пойти направо" << endl;
 		while (true) {
 			switch (_getch()) {
 			case 49:
@@ -128,11 +128,12 @@ public:
 };
 
 class Enemy { // враг
-private:
+public:
 	int strong;
 	string loot;
+	bool visited;
+	bool alive;
 	
-public:
 	Enemy() {}
 
 	int attack(int hero_strong, int enemy_strong) {
@@ -141,24 +142,84 @@ public:
 		if (win_chance_percent < rand() % 100) return 1;
 		else return 0;
 	}
+
+	int getStrong() {
+		return strong;
+	}
+
+	void setVisited(bool visit) {
+		visited = visit;
+	}
+
+	bool getVisited() {
+		return visited;
+	}
+
+	void setAlive(bool al) {
+		alive = al;
+	}
+
+	bool getAlive() {
+		return alive;
+	}
 };
 
+class Imp : public Enemy {
+public:
+	Imp(int pow, string loot, bool visit) {
+		this->strong = pow;
+		this->loot = loot;
+		this->visited = visit;
+	}
 
+	void dialog() {
+		cout << "я имп" << endl;
+	}
+
+	void deadImp() {
+		cout << "я мертвый имп" << endl;
+	}
+
+	string moveTo() {
+		cout << "Нажмите 1, чтобы вернуться к мудрецу" << endl;
+		cout << "Нажмите 2, чтобы пойти вперед" << endl;
+		cout << "Нажмите 3, чтобы пойти направо" << endl;
+		while (true) {
+			switch (_getch()) {
+			case 49:
+				return "info";
+				break;
+			case 50:
+				return "sphinx";
+				break;
+			case 51:
+				return "elf";
+				break;
+			default:
+				cout << "Каво?" << endl;
+				break;
+			}
+		}
+	}
+};
 
 int main() {
 	setlocale(LC_ALL, "Russian");
 
+	restart:
+	for (int i = 0; i < 100; i++) cout << "\n\n\n\n\n"; // костыль для очистки консоли
 	map <string, int> locations = { {"start", 0},  {"info", 1},
 									{"imp", 2},    {"elf", 3},
 									{"sphinx", 4}, {"traveler", 5},
 									{"demon", 6},  {"witch", 7},
 									{"boss", 8},   {"finish", 9} };
 
-	Hero Drachir(3, 0, 0, 0, "start");
+	Hero Drachir(1, 0, 8, 0, "start");
 	Start start;
 	Info info;
-
-	restart:
+	Imp imp(9, "imp's pitchfork", false);
+	imp.setAlive(true);
+	
 	while (Drachir.getHealth() > 0) {
 		switch (locations[Drachir.getLocation()]) {
 			case 0:
@@ -172,13 +233,25 @@ int main() {
 				Drachir.setLocation(info.moveTo());
 				break;
 			case 2:
-				cout << _getch();
 				// переход в локацию импа
+				if (!imp.getVisited()) {
+					imp.dialog();
+					imp.setVisited(true);
+					Drachir.setHealth(Drachir.getHealth() - imp.attack(Drachir.getStrong(), imp.getStrong()));
+					if (Drachir.getHealth() == 0) break;
+					imp.setAlive(false);
+				}
+				else {
+					if (imp.getAlive() == false)imp.deadImp();
+				}
+				Drachir.setLocation(imp.moveTo());
 				break;
 			case 3:
+				cout << "elf";
 				// переход в локацию эльфа
 				break;
 			case 4:
+				cout << "sphinx";
 				// переход в локацию сфинкса
 				break;
 			case 5:
