@@ -128,23 +128,35 @@ public:
 };
 
 class Enemy { // враг
-public:
+protected:
 	int strong;
 	string loot;
 	bool visited;
 	bool alive;
-	
+
+public:
 	Enemy() {}
 
 	int attack(int hero_strong, int enemy_strong) {
 		double win_chance_percent = (hero_strong / enemy_strong) * 100;
 		win_chance_percent = (int)win_chance_percent;
-		if (win_chance_percent < rand() % 100) return 1;
+		int rnd = rand() % 100;
+		cout << win_chance_percent;
+		cout << rnd;
+		if (win_chance_percent < rnd) return 1;
 		else return 0;
 	}
 
 	int getStrong() {
 		return strong;
+	}
+
+	void setLoot(string item) {
+		loot = item;
+	}
+
+	string getLoot() {
+		return loot;
 	}
 
 	void setVisited(bool visit) {
@@ -165,11 +177,12 @@ public:
 };
 
 class Imp : public Enemy {
-public:
-	Imp(int pow, string loot, bool visit) {
+public: 
+	Imp(int pow, string item, bool visit, bool alive) {
 		this->strong = pow;
-		this->loot = loot;
+		this->loot = item;
 		this->visited = visit;
+		this->alive = alive;
 	}
 
 	void dialog() {
@@ -217,7 +230,7 @@ int main() {
 	Hero Drachir(1, 0, 8, 0, "start");
 	Start start;
 	Info info;
-	Imp imp(9, "imp's pitchfork", false);
+	Imp imp(9, "imp's pitchfork", false, true);
 	imp.setAlive(true);
 	
 	while (Drachir.getHealth() > 0) {
