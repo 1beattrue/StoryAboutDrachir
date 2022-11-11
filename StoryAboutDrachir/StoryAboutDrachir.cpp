@@ -796,6 +796,19 @@ int main() {
 			if (!imp.getVisited()) {
 				imp.dialog();
 				imp.setVisited(true);
+
+				if (Drachir.getInvisibility()) {
+					cout << "Вы можете использовать магию невидимости, нажав 1, либо вступить в сражение, нажав любую другую клавишу" << endl;
+					switch (_getch()) {
+					case 49:
+						cout << "Вы стали незаметным для врага. Куда бежать?" << endl;
+						Drachir.setInvisibility(false);
+						imp.setVisited(false);
+						goto skip_imp;
+						break;
+					}
+				}
+
 				Drachir.setHealth(Drachir.getHealth() - imp.attack(Drachir.getStrong(), imp.getStrong()));
 				if (Drachir.getHealth() == 0) break;
 				imp.setAlive(false);
@@ -805,6 +818,7 @@ int main() {
 			else {
 				if (imp.getAlive() == false)imp.deadImp();
 			}
+			skip_imp:
 			Drachir.setLocation(imp.moveTo());
 			break;
 		case 3:
@@ -883,6 +897,18 @@ int main() {
 			if (demon.getAlive()) {
 				demon.dialog(demon.getVisited());
 				demon.setVisited(true);
+
+				if (Drachir.getInvisibility()) {
+					cout << "Вы можете использовать магию невидимости, нажав 1, либо вступить в сражение, нажав любую другую клавишу" << endl;
+					switch (_getch()) {
+					case 49:
+						cout << "Вы стали незаметным для врага. Куда бежать?" << endl;
+						Drachir.setInvisibility(false);
+						goto skip_demon;
+						break;
+					}
+				}
+
 				int battle = demon.attack(Drachir.getStrong(), demon.getStrong());
 				Drachir.setHealth(Drachir.getHealth() - battle);
 				if (battle == 0) {
@@ -893,6 +919,7 @@ int main() {
 			}
 			else demon.deadDemon();
 			if (Drachir.getHealth() == 0) break;
+			skip_demon:
 			Drachir.setLocation(demon.moveTo());
 			break;
 		case 7:
