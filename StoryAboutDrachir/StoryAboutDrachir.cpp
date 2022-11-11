@@ -687,6 +687,55 @@ public:
 	}
 };
 
+//class Boss {
+//private:
+//	int strong;
+//
+//public:
+//	Boss(int pow) {
+//		this->strong = pow;
+//	}
+//
+//	int attack(int hero_strong, int enemy_strong) {
+//		double win_chance_percent = ((double)hero_strong / enemy_strong) * 100;
+//		win_chance_percent = (int)win_chance_percent;
+//		int rnd = rand() % 100;
+//		cout << win_chance_percent << endl;
+//		cout << rnd << endl;
+//		if (win_chance_percent < rnd) {
+//			cout << "поражение" << endl;
+//			return 1;
+//		}
+//		else {
+//			cout << "победа" << endl;
+//			return 0;
+//		}
+//	}
+//
+//	int getStrong() {
+//		return strong;
+//	}
+//
+//	void dialog() {
+//		cout << "я босс" << endl;
+//	}
+//
+//	void deadBoss() {
+//		cout << "вы убили босса" << endl;
+//	}
+//
+//	string moveTo() {
+//		cout << "Для продолжения нажмите space" << endl;
+//		while (true) {
+//			switch (_getch()) {
+//			case 32:
+//				return "finish";
+//				break;
+//			}
+//		}
+//	}
+//};
+
 
 int powerOfHero(vector <string> arg) {
 	map <string, int> items = { {"full of holes chain armor", 5},
@@ -716,7 +765,7 @@ int main() {
 									{"demon", 6},  {"witch", 7},
 									{"boss", 8},   {"finish", 9} };
 
-	Hero Drachir(5, 0, 0, 0, "start", {});
+	Hero Drachir(2, 0, 0, 0, "start", {});
 	Start start;
 	Info info;
 	Imp imp(9, "imp's pitchfork", false, true);
@@ -725,6 +774,7 @@ int main() {
 	Witch witch(1, "magic", false, true);
 	Traveler traveler(false, true);
 	Elf elf(false, true);
+	//Boss boss(129);
 	
 	while (Drachir.getHealth() > 0) {
 		switch (locations[Drachir.getLocation()]) {
@@ -882,10 +932,14 @@ int main() {
 			if (Drachir.getHealth() == 0) break;
 			Drachir.setLocation(witch.moveTo());
 			break;
-			break;
 		case 8:
 			// переход в локацию сатаны
-			cout << "boss";
+			//boss.dialog();
+			//int battle = boss.attack(Drachir.getStrong(), boss.getStrong());
+			//Drachir.setHealth(Drachir.getHealth() - battle);
+
+			if (Drachir.getHealth() == 0) break;
+			//Drachir.setLocation(boss.moveTo());
 			break;
 		case 9:
 			// переход в локацию финиш
