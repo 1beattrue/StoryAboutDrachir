@@ -102,20 +102,16 @@ public:
 	}
 };
 
-class Finish { // старт
-private:
-	int ending;
+class Finish { // финиш
 public:
-	Finish(int end) {
-		this->ending = end;
-	}
+	Finish() {}
 
-	void gameEnding() {
-		ifstream fin_end("gameEnding.txt");
+	void nobodyEnding() {
+		ifstream fin_nobody_end("gameEnding.txt");
 		string s;
-		getline(fin_end, s);
+		getline(fin_nobody_end, s);
 		cout << s << endl;
-		while (getline(fin_end, s)) {
+		while (getline(fin_nobody_end, s)) {
 			cout << "Нажмите space, чтобы продолжть" << endl;
 			bool flag = true;
 			while (flag) {
@@ -127,7 +123,47 @@ public:
 			}
 			cout << s << endl;
 		}
-		fin_end.close();
+		fin_nobody_end.close();
+	}
+
+	void badEnding() {
+		ifstream fin_bad_end("badEnding.txt");
+		string s;
+		getline(fin_bad_end, s);
+		cout << s << endl;
+		while (getline(fin_bad_end, s)) {
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+			cout << s << endl;
+		}
+		fin_bad_end.close();
+	}
+
+	void goodEnding() {
+		ifstream fin_good_end("goodEnding.txt");
+		string s;
+		getline(fin_good_end, s);
+		cout << s << endl;
+		while (getline(fin_good_end, s)) {
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+			cout << s << endl;
+		}
+		fin_good_end.close();
 	}
 };
 
@@ -775,6 +811,7 @@ int main() {
 	Traveler traveler(false, true);
 	Elf elf(false, true);
 	Boss boss(129);
+	Finish finish;
 	
 	while (Drachir.getHealth() > 0) {
 		switch (locations[Drachir.getLocation()]) {
@@ -949,6 +986,7 @@ int main() {
 					int battle = witch.attack(Drachir.getStrong(), witch.getStrong());
 					Drachir.setHealth(Drachir.getHealth() - battle);
 					if (battle == 0) {
+						Drachir.setReputation(Drachir.getReputation() - 5);
 						witch.setAlive(false);
 						Drachir.addItemToInventory(witch.getLoot());
 						Drachir.setInvisibility(true);
@@ -970,7 +1008,24 @@ int main() {
 			break;
 		case 9:
 			// переход в локацию финиш
-			cout << "finish";
+			int final_rep = Drachir.getReputation();
+			if (final_rep > 5) {
+				finish.goodEnding();
+			}
+			else if (final_rep < 10) {
+				finish.badEnding();
+			}
+			else finish.nobodyEnding();
+			cout << "Вы прошли игру.\nХотите начать заново? Нажмите Enter\nХотите завершить игру? Нажмите Esc" << endl;
+			while (true) {
+				switch (_getch()) {
+				case 13:
+					goto restart;
+					break;
+				case 27:
+					exit(0);
+				}
+			}
 			break;
 		}
 	}
