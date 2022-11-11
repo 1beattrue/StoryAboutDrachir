@@ -36,6 +36,7 @@ public:
 	void setReputation(int rep) { // изменение репутации
 		if (rep < reputation) cout << "Вы совершили плохой поступок. Ваша репутация ухудшилась..." << endl;
 		else cout << "Вы совершили хороший поступок! Ваша репутация увеличилась!" << endl;
+		cout << "Ваша текущая репутация: " << rep << endl;
 		reputation = rep;
 	}
 
@@ -738,10 +739,8 @@ int main() {
 		case 5:
 			// переход в локацию путника
 			if (traveler.getAlive()) {
-				if (traveler.getVisited()) {
-					traveler.dialog(traveler.getVisited());
-				}
-				else {
+				traveler.dialog(traveler.getVisited());
+				if (!traveler.getVisited()) {
 					traveler.setVisited(true);
 					if (traveler.choice()) Drachir.setReputation(Drachir.getReputation() + 5);
 					else {
