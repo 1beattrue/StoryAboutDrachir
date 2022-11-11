@@ -11,16 +11,16 @@ private:
 	int health;
 	int reputation;
 	int strong;
-	int endurance;
+	bool invisibility;
 	string location;
 	vector <string> inventory;
 
 public:
-	Hero(int hp, int rep, int pow, int end, string loc, vector <string> items) { // конструктор 
+	Hero(int hp, int rep, int pow, int invis, string loc, vector <string> items) { // конструктор 
 		this->health = hp;
 		this->reputation = rep;
 		this->strong = pow;
-		this->endurance = end;
+		this->invisibility = invis;
 		this->location = loc;
 		this->inventory = items;
 	}
@@ -52,12 +52,12 @@ public:
 		return strong;
 	}
 
-	void setEndurance(int end) { // изменение выносливости
-		endurance = end;
+	void setInvisibility(bool invis) { // изменение невидимости
+		invisibility = invis;
 	}
 
-	int getEndurance() { // получение выносливости
-		return endurance;
+	int getInvisibility() { // получение невидимости
+		return invisibility;
 	}
 
 	void setLocation(string loc) { // изменение локации
@@ -610,7 +610,7 @@ public:
 				return "info";
 				break;
 			case 50:
-				return "boss";
+				return "witch";
 				break;
 			case 51:
 				return "sphinx";
@@ -765,7 +765,7 @@ int main() {
 									{"demon", 6},  {"witch", 7},
 									{"boss", 8},   {"finish", 9} };
 
-	Hero Drachir(2, 0, 0, 0, "start", {});
+	Hero Drachir(2, 0, 0, false, "start", {});
 	Start start;
 	Info info;
 	Imp imp(9, "imp's pitchfork", false, true);
@@ -911,6 +911,7 @@ int main() {
 				case 1:
 					if (witch.riddles()) {
 						Drachir.addItemToInventory(witch.getLoot());
+						Drachir.setInvisibility(true);
 						Drachir.setStrong(powerOfHero(Drachir.getInventory()));
 					}
 					else {
@@ -923,6 +924,7 @@ int main() {
 					if (battle == 0) {
 						witch.setAlive(false);
 						Drachir.addItemToInventory(witch.getLoot());
+						Drachir.setInvisibility(true);
 						Drachir.setStrong(powerOfHero(Drachir.getInventory()));
 					}
 					break;
