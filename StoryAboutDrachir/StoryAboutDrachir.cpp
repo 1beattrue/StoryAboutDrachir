@@ -533,6 +533,96 @@ public:
 	}
 };
 
+class Npc {
+protected:
+	bool visited;
+	bool alive;
+
+public:
+	Npc() {}
+
+	void setVisited(bool visit) {
+		visited = visit;
+	}
+
+	bool getVisited() {
+		return visited;
+	}
+
+	void setAlive(bool al) {
+		alive = al;
+	}
+
+	bool getAlive() {
+		return alive;
+	}
+};
+
+class Traveler : public Npc {
+public:
+	Traveler(bool visit, bool alive) {
+		this->visited = visit;
+		this->alive = alive;
+	}
+
+	void dialog(bool visit) {
+		if (!visit) {
+			cout << "я путник" << endl;
+		}
+		else {
+			cout << "я путник и ты уже был здесь" << endl;
+		}
+	}
+
+	bool choice() {
+		cout << "Нажмите 1, чтобы помочь" << endl;
+		cout << "Нажмите 2, чтобы проигнорировать просьбу" << endl;
+		while (true) {
+			switch (_getch()) {
+			case 49:
+				return true;
+				break;
+			case 50:
+				return false;
+				break;
+			default:
+				cout << "Каво?" << endl;
+				break;
+			}
+		}
+	}
+
+	void deadTraveler() {
+		cout << "я мертвый путник" << endl;
+	}
+
+	string moveTo() {
+		cout << "Нажмите 1, чтобы вернуться к мудрецу" << endl;
+		cout << "Нажмите 2, чтобы пойти вперед" << endl;
+		cout << "Нажмите 3, чтобы пойти налево" << endl;
+		cout << "Нажмите 4, чтобы пойти назад" << endl;
+		while (true) {
+			switch (_getch()) {
+			case 49:
+				return "info";
+				break;
+			case 50:
+				return "boss";
+				break;
+			case 51:
+				return "sphinx";
+				break;
+			case 52:
+				return "elf";
+				break;
+			default:
+				cout << "Каво?" << endl;
+				break;
+			}
+		}
+	}
+};
+
 
 int powerOfHero(vector <string> arg) {
 	map <string, int> items = { {"full of holes chain armor", 5},
