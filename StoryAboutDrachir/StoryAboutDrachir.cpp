@@ -292,7 +292,7 @@ public:
 				return "info";
 				break;
 			case 50:
-				return "sphinx";
+				return "traveler";
 				break;
 			case 51:
 				return "elf";
@@ -390,7 +390,7 @@ public:
 	string moveTo() {
 		cout << "Нажмите 1, чтобы вернуться к мудрецу" << endl;
 		cout << "Нажмите 2, чтобы пойти вперед" << endl;
-		cout << "Нажмите 3, чтобы пойти направо" << endl;
+		cout << "Нажмите 3, чтобы пойти налево" << endl;
 		cout << "Нажмите 4, чтобы пойти назад" << endl;
 		while (true) {
 			switch (_getch()) {
@@ -398,13 +398,13 @@ public:
 				return "info";
 				break;
 			case 50:
-				return "demon";
+				return "witch";
 				break;
 			case 51:
 				return "traveler";
 				break;
 			case 52:
-				return "imp";
+				return "elf";
 				break;
 			default:
 				cout << "Каво?" << endl;
@@ -453,7 +453,7 @@ public:
 				return "witch";
 				break;
 			case 52:
-				return "sphinx";
+				return "traveler";
 				break;
 			default:
 				cout << "Каво?" << endl;
@@ -562,7 +562,7 @@ public:
 				return "demon";
 				break;
 			case 52:
-				return "traveler";
+				return "sphinx";
 				break;
 			default:
 				cout << "Каво?" << endl;
@@ -638,7 +638,7 @@ public:
 	string moveTo() {
 		cout << "Нажмите 1, чтобы вернуться к мудрецу" << endl;
 		cout << "Нажмите 2, чтобы пойти вперед" << endl;
-		cout << "Нажмите 3, чтобы пойти налево" << endl;
+		cout << "Нажмите 3, чтобы пойти направо" << endl;
 		cout << "Нажмите 4, чтобы пойти назад" << endl;
 		while (true) {
 			switch (_getch()) {
@@ -646,13 +646,13 @@ public:
 				return "info";
 				break;
 			case 50:
-				return "witch";
+				return "demon";
 				break;
 			case 51:
 				return "sphinx";
 				break;
 			case 52:
-				return "elf";
+				return "imp";
 				break;
 			default:
 				cout << "Каво?" << endl;
@@ -710,7 +710,7 @@ public:
 				return "info";
 				break;
 			case 50:
-				return "traveler";
+				return "sphinx";
 				break;
 			case 51:
 				return "imp";
@@ -797,7 +797,7 @@ int main() {
 	
 	map <string, int> locations = { {"start", 0},  {"info", 1},     // карта 
 									{"imp", 2},    {"elf", 3},
-									{"sphinx", 4}, {"traveler", 5},
+									{"traveler", 4}, {"sphinx", 5},
 									{"demon", 6},  {"witch", 7},
 									{"boss", 8},   {"finish", 9} };
 
@@ -876,6 +876,23 @@ int main() {
 			Drachir.setLocation(elf.moveTo());
 			break;
 		case 4:
+			// переход в локацию путника
+			if (traveler.getAlive()) {
+				traveler.dialog(traveler.getVisited());
+				if (!traveler.getVisited()) {
+					traveler.setVisited(true);
+					if (traveler.choice()) Drachir.setReputation(Drachir.getReputation() + 5);
+					else {
+						Drachir.setReputation(Drachir.getReputation() - 5);
+						traveler.setAlive(false);
+					}
+				}
+			}
+			else traveler.deadTraveler();
+			if (Drachir.getHealth() == 0) break;
+			Drachir.setLocation(traveler.moveTo());
+			break;
+		case 5:
 			// переход в локацию сфинкса
 			if (sphinx.getAlive()) {
 				sphinx.dialog(sphinx.getVisited());
@@ -911,23 +928,6 @@ int main() {
 			else sphinx.deadSphinx();
 			if (Drachir.getHealth() == 0) break;
 			Drachir.setLocation(sphinx.moveTo());
-			break;
-		case 5:
-			// переход в локацию путника
-			if (traveler.getAlive()) {
-				traveler.dialog(traveler.getVisited());
-				if (!traveler.getVisited()) {
-					traveler.setVisited(true);
-					if (traveler.choice()) Drachir.setReputation(Drachir.getReputation() + 5);
-					else {
-						Drachir.setReputation(Drachir.getReputation() - 5);
-						traveler.setAlive(false);
-					}
-				}
-			}
-			else traveler.deadTraveler();
-			if (Drachir.getHealth() == 0) break;
-			Drachir.setLocation(traveler.moveTo());
 			break;
 		case 6:
 			// переход в локацию демона
