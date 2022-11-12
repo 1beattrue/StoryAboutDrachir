@@ -107,7 +107,7 @@ public:
 	Finish() {}
 
 	void nobodyEnding() {
-		ifstream fin_nobody_end("gameEnding.txt");
+		ifstream fin_nobody_end("nobodyEnding.txt");
 		string s;
 		getline(fin_nobody_end, s);
 		cout << s << endl;
@@ -168,27 +168,45 @@ public:
 };
 
 class Info { // мудрец
-public:
-	Info() {}
+private:
+	bool visited;
 
-	void dialog() {
-		ifstream fin1("infoDialog.txt");
-		string s;
-		getline(fin1, s);
-		cout << s << endl;
-		while (getline(fin1, s)) {
-			cout << "Нажмите space, чтобы продолжть" << endl;
-			bool flag = true;
-			while (flag) {
-				switch (_getch()) {
-				case 32:
-					flag = false;
-					break;
-				}
-			}
+public:
+	Info(bool visit) {
+		this->visited = visit;
+	}
+
+	void dialog(bool visit) {
+		if (!visit) {
+			ifstream fin1("infoDialog.txt");
+			string s;
+			getline(fin1, s);
 			cout << s << endl;
+			while (getline(fin1, s)) {
+				cout << "Нажмите space, чтобы продолжть" << endl;
+				bool flag = true;
+				while (flag) {
+					switch (_getch()) {
+					case 32:
+						flag = false;
+						break;
+					}
+				}
+				cout << s << endl;
+			}
+			fin1.close();
 		}
-		fin1.close();
+		else {
+			cout << "я мудрец и ты уже был здесь" << endl;
+		}
+	}
+
+	void setVisited(bool visit) {
+		visited = visit;
+	}
+
+	bool getVisited() {
+		return visited;
 	}
 
 	string moveTo() {
@@ -398,7 +416,7 @@ public:
 				return "info";
 				break;
 			case 50:
-				return "witch";
+				return "demon";
 				break;
 			case 51:
 				return "traveler";
@@ -439,7 +457,7 @@ public:
 	string moveTo() {
 		cout << "Нажмите 1, чтобы вернуться к мудрецу" << endl;
 		cout << "Нажмите 2, чтобы пойти вперед" << endl;
-		cout << "Нажмите 3, чтобы пойти направо" << endl;
+		cout << "Нажмите 3, чтобы пойти налево" << endl;
 		cout << "Нажмите 4, чтобы пойти назад" << endl;
 		while (true) {
 			switch (_getch()) {
@@ -453,7 +471,7 @@ public:
 				return "witch";
 				break;
 			case 52:
-				return "traveler";
+				return "sphinx";
 				break;
 			default:
 				cout << "Каво?" << endl;
@@ -548,7 +566,7 @@ public:
 	string moveTo() {
 		cout << "Нажмите 1, чтобы вернуться к мудрецу" << endl;
 		cout << "Нажмите 2, чтобы пойти вперед" << endl;
-		cout << "Нажмите 3, чтобы пойти налево" << endl;
+		cout << "Нажмите 3, чтобы пойти направо" << endl;
 		cout << "Нажмите 4, чтобы пойти назад" << endl;
 		while (true) {
 			switch (_getch()) {
@@ -562,7 +580,7 @@ public:
 				return "demon";
 				break;
 			case 52:
-				return "sphinx";
+				return "traveler";
 				break;
 			default:
 				cout << "Каво?" << endl;
@@ -646,7 +664,7 @@ public:
 				return "info";
 				break;
 			case 50:
-				return "demon";
+				return "witch";
 				break;
 			case 51:
 				return "sphinx";
@@ -773,6 +791,26 @@ public:
 };
 
 
+class Map {
+private:
+	string tmp_location;
+
+public:
+	Map() {}
+
+	void setLocation(string loc) {
+		tmp_location = loc;
+	}
+
+	string getLocation() {
+		return tmp_location;
+	}
+
+	void showMap(string loc) {
+		
+	}
+};
+
 int powerOfHero(vector <string> arg) {
 	map <string, int> items = { {"full of holes chain armor", 5},
 								{"rusty poleaxe", 5},
@@ -798,12 +836,12 @@ int main() {
 	map <string, int> locations = { {"start", 0},  {"info", 1},     // карта 
 									{"imp", 2},    {"elf", 3},
 									{"traveler", 4}, {"sphinx", 5},
-									{"demon", 6},  {"witch", 7},
+									{"witch", 6},  {"demon", 7},
 									{"boss", 8},   {"finish", 9} };
 
 	Hero Drachir(2, 0, 0, false, "start", {});
 	Start start;
-	Info info;
+	Info info(false);
 	Imp imp(9, "imp's pitchfork", false, true);
 	Sphinx sphinx(300, "silver sword", false, true);
 	Demon demon(79, "demon armor", false, true);
@@ -825,7 +863,8 @@ int main() {
 			break;
 		case 1:
 			// переход в локацию инфо
-			info.dialog();
+			info.dialog(info.getVisited());
+			info.setVisited(true);
 			Drachir.setLocation(info.moveTo());
 			break;
 		case 2:
@@ -930,36 +969,6 @@ int main() {
 			Drachir.setLocation(sphinx.moveTo());
 			break;
 		case 6:
-			// переход в локацию демона
-			if (demon.getAlive()) {
-				demon.dialog(demon.getVisited());
-				demon.setVisited(true);
-
-				if (Drachir.getInvisibility()) {
-					cout << "Вы можете использовать магию невидимости, нажав 1, либо вступить в сражение, нажав любую другую клавишу" << endl;
-					switch (_getch()) {
-					case 49:
-						cout << "Вы стали незаметным для врага. Куда бежать?" << endl;
-						Drachir.setInvisibility(false);
-						goto skip_demon;
-						break;
-					}
-				}
-
-				int battle = demon.attack(Drachir.getStrong(), demon.getStrong());
-				Drachir.setHealth(Drachir.getHealth() - battle);
-				if (battle == 0) {
-					demon.setAlive(false);
-					Drachir.addItemToInventory(demon.getLoot());
-					Drachir.setStrong(powerOfHero(Drachir.getInventory()));
-				}
-			}
-			else demon.deadDemon();
-			if (Drachir.getHealth() == 0) break;
-			skip_demon:
-			Drachir.setLocation(demon.moveTo());
-			break;
-		case 7:
 			// переход в локацию волшебницы
 			if (witch.getAlive()) {
 				witch.dialog(witch.getVisited());
@@ -998,6 +1007,36 @@ int main() {
 			else witch.deadWitch();
 			if (Drachir.getHealth() == 0) break;
 			Drachir.setLocation(witch.moveTo());
+			break;
+		case 7:
+			// переход в локацию демона
+			if (demon.getAlive()) {
+				demon.dialog(demon.getVisited());
+				demon.setVisited(true);
+
+				if (Drachir.getInvisibility()) {
+					cout << "Вы можете использовать магию невидимости, нажав 1, либо вступить в сражение, нажав любую другую клавишу" << endl;
+					switch (_getch()) {
+					case 49:
+						cout << "Вы стали незаметным для врага. Куда бежать?" << endl;
+						Drachir.setInvisibility(false);
+						goto skip_demon;
+						break;
+					}
+				}
+
+				int battle = demon.attack(Drachir.getStrong(), demon.getStrong());
+				Drachir.setHealth(Drachir.getHealth() - battle);
+				if (battle == 0) {
+					demon.setAlive(false);
+					Drachir.addItemToInventory(demon.getLoot());
+					Drachir.setStrong(powerOfHero(Drachir.getInventory()));
+				}
+			}
+			else demon.deadDemon();
+			if (Drachir.getHealth() == 0) break;
+		skip_demon:
+			Drachir.setLocation(demon.moveTo());
 			break;
 		case 8:
 			// переход в локацию сатаны
