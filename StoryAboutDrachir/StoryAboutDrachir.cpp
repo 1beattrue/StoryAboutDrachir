@@ -798,16 +798,50 @@ private:
 public:
 	Map() {}
 
-	void setLocation(string loc) {
-		tmp_location = loc;
-	}
-
-	string getLocation() {
-		return tmp_location;
-	}
-
 	void showMap(string loc) {
-		
+		ifstream fin_map("map.txt");
+		vector <string> m;
+		string tmp;
+		while (getline(fin_map, tmp)) {
+			m.push_back(tmp);
+		}
+
+		// размещение персонажа
+		if (loc == "info") {
+			m[21][31] = '<';
+			m[21][38] = '>';
+		}
+		else if (loc == "imp") {
+			m[18][21] = '<';
+			m[18][25] = '>';
+		}
+		else if (loc == "elf") {
+			m[18][43] = '<';
+			m[18][48] = '>';
+		}
+		else if (loc == "traveler") {
+			m[14][17] = '<';
+			m[14][24] = '>';
+		}
+		else if (loc == "sphinx") {
+			m[14][36] = '<';
+			m[14][43] = '>';
+		}
+		else if (loc == "witch") {
+			m[10][14] = '<';
+			m[10][21] = '>';
+		}
+		else if (loc == "demon") {
+			m[10][31] = '<';
+			m[10][37] = '>';
+		}
+
+		// вывод карты
+		cout << endl;
+		for (string x : m) {
+			cout << x << endl;
+		}
+		cout << endl;
 	}
 };
 
@@ -839,7 +873,7 @@ int main() {
 									{"witch", 6},  {"demon", 7},
 									{"boss", 8},   {"finish", 9} };
 
-	Hero Drachir(2, 0, 0, false, "start", {});
+	Hero Drachir(3, 0, 0, false, "start", {});
 	Start start;
 	Info info(false);
 	Imp imp(9, "imp's pitchfork", false, true);
@@ -850,6 +884,7 @@ int main() {
 	Elf elf(false, true);
 	Boss boss(129);
 	Finish finish;
+	Map gamemap;
 	
 	while (Drachir.getHealth() > 0) {
 		switch (locations[Drachir.getLocation()]) {
@@ -865,6 +900,7 @@ int main() {
 			// переход в локацию инфо
 			info.dialog(info.getVisited());
 			info.setVisited(true);
+			gamemap.showMap(Drachir.getLocation()); // карта
 			Drachir.setLocation(info.moveTo());
 			break;
 		case 2:
@@ -895,6 +931,7 @@ int main() {
 				if (imp.getAlive() == false)imp.deadImp();
 			}
 			skip_imp:
+			gamemap.showMap(Drachir.getLocation()); // карта
 			Drachir.setLocation(imp.moveTo());
 			break;
 		case 3:
@@ -912,6 +949,7 @@ int main() {
 			}
 			else elf.deadElf();
 			if (Drachir.getHealth() == 0) break;
+			gamemap.showMap(Drachir.getLocation()); // карта
 			Drachir.setLocation(elf.moveTo());
 			break;
 		case 4:
@@ -929,6 +967,7 @@ int main() {
 			}
 			else traveler.deadTraveler();
 			if (Drachir.getHealth() == 0) break;
+			gamemap.showMap(Drachir.getLocation()); // карта
 			Drachir.setLocation(traveler.moveTo());
 			break;
 		case 5:
@@ -966,6 +1005,7 @@ int main() {
 			}
 			else sphinx.deadSphinx();
 			if (Drachir.getHealth() == 0) break;
+			gamemap.showMap(Drachir.getLocation()); // карта
 			Drachir.setLocation(sphinx.moveTo());
 			break;
 		case 6:
@@ -1006,6 +1046,7 @@ int main() {
 			}
 			else witch.deadWitch();
 			if (Drachir.getHealth() == 0) break;
+			gamemap.showMap(Drachir.getLocation()); // карта
 			Drachir.setLocation(witch.moveTo());
 			break;
 		case 7:
@@ -1035,7 +1076,8 @@ int main() {
 			}
 			else demon.deadDemon();
 			if (Drachir.getHealth() == 0) break;
-		skip_demon:
+			skip_demon:
+			gamemap.showMap(Drachir.getLocation()); // карта
 			Drachir.setLocation(demon.moveTo());
 			break;
 		case 8:
