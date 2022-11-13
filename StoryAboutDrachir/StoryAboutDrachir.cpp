@@ -677,6 +677,24 @@ public:
 		}
 	}
 
+	void killingDialog() {
+		ifstream witch_killing_dialog("witchKillingDialog.txt");
+		string s;
+		while (getline(witch_killing_dialog, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		witch_killing_dialog.close();
+	}
+
 	int choice1() {
 		cout << "Отгадать загадки или убить?" << endl;
 		cout << "Нажмите 1, чтобы начать отгадывать загадки" << endl;
@@ -716,7 +734,7 @@ public:
 	}
 
 	bool riddles() {
-		ifstream witch_riddles("witchRiddles");
+		ifstream witch_riddles("witchRiddles.txt");
 		string quest1, quest2, quest3;
 		getline(witch_riddles, quest1);
 		getline(witch_riddles, quest2);
@@ -1472,6 +1490,7 @@ int main() {
 					break;
 				case 2:
 					SetConsoleTextAttribute(hConsole, 15);
+					witch.killingDialog();
 					int battle = witch.attack(Drachir.getStrong(), witch.getStrong());
 					SetConsoleTextAttribute(hConsole, 2);
 					Drachir.setHealth(Drachir.getHealth() - battle);
