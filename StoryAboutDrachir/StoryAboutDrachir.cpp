@@ -858,6 +858,42 @@ public:
 		}
 	}
 
+	void help() {
+		ifstream traveler_help("travelerHelp.txt");
+		string s;
+		while (getline(traveler_help, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		traveler_help.close();
+	}
+
+	void ignore() {
+		ifstream traveler_ignore("travelerIgnore.txt");
+		string s;
+		while (getline(traveler_ignore, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		traveler_ignore.close();
+	}
+
 	void deadTraveler() {
 		ifstream traveler_dead_dialog("travelerDeadDialog.txt");
 		string s;
@@ -963,6 +999,42 @@ public:
 				break;
 			}
 		}
+	}
+
+	void help() {
+		ifstream elf_help("elfHelp.txt");
+		string s;
+		while (getline(elf_help, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		elf_help.close();
+	}
+
+	void ignore() {
+		ifstream elf_ignore("elfIgnore.txt");
+		string s;
+		while (getline(elf_ignore, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		elf_ignore.close();
 	}
 
 	void deadElf() {
@@ -1254,10 +1326,12 @@ int main() {
 					elf.setVisited(true);
 					SetConsoleTextAttribute(hConsole, 3);
 					if (elf.choice()) {
+						elf.help();
 						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.setReputation(Drachir.getReputation() + 5);
 					}
 					else {
+						elf.ignore();
 						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.setReputation(Drachir.getReputation() - 5);
 						elf.setAlive(false);
