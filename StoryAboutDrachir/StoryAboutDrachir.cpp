@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <windows.h>
 using namespace std;
 
 class Hero {
@@ -27,6 +28,9 @@ public:
 
 	void setHealth(int hp) { // изменение здоровья
 		health = hp;
+		cout << "Ваше здоровье: ";
+		for (int i = 0; i < health; i++) cout << "<3 ";
+		cout << endl;
 	}
 
 	int getHealth() { // получение здоровья
@@ -36,7 +40,7 @@ public:
 	void setReputation(int rep) { // изменение репутации
 		if (rep < reputation) cout << "Вы совершили плохой поступок. Ваша репутация ухудшилась..." << endl;
 		else cout << "Вы совершили хороший поступок! Ваша репутация увеличилась!" << endl;
-		cout << "Ваша текущая репутация: " << rep << endl;
+		cout << "Ваша репутация: " << rep << endl;
 		reputation = rep;
 	}
 
@@ -53,6 +57,7 @@ public:
 	}
 
 	void setInvisibility(bool invis) { // изменение невидимости
+		if (invis == true) cout << "Теперь у вас есть магия невидимости" << endl;
 		invisibility = invis;
 	}
 
@@ -857,7 +862,7 @@ int powerOfHero(vector <string> arg) {
 		p += items[x];
 		cout << x << endl;
 	}
-	cout << "сила = " << p << endl;
+	cout << "Ваша сила: " << p << endl;
 	return p;
 }
 
@@ -885,12 +890,16 @@ int main() {
 	Boss boss(129);
 	Finish finish;
 	Map gamemap;
+	HANDLE hConsole;
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	
 	while (Drachir.getHealth() > 0) {
 		switch (locations[Drachir.getLocation()]) {
 		case 0:
 			// переход в локацию старт
+			SetConsoleTextAttribute(hConsole, 15);
 			start.gameDescription();
+			SetConsoleTextAttribute(hConsole, 2);
 			Drachir.addItemToInventory("full of holes chain armor");
 			Drachir.addItemToInventory("rusty poleaxe");
 			Drachir.setStrong(powerOfHero(Drachir.getInventory()));
@@ -898,13 +907,16 @@ int main() {
 			break;
 		case 1:
 			// переход в локацию инфо
+			SetConsoleTextAttribute(hConsole, 15);
 			info.dialog(info.getVisited());
 			info.setVisited(true);
 			gamemap.showMap(Drachir.getLocation()); // карта
+			SetConsoleTextAttribute(hConsole, 3);
 			Drachir.setLocation(info.moveTo());
 			break;
 		case 2:
 			// переход в локацию импа
+			SetConsoleTextAttribute(hConsole, 15);
 			if (!imp.getVisited()) {
 				imp.dialog();
 				imp.setVisited(true);
@@ -920,28 +932,37 @@ int main() {
 						break;
 					}
 				}
-
-				Drachir.setHealth(Drachir.getHealth() - imp.attack(Drachir.getStrong(), imp.getStrong()));
+				int battle = imp.attack(Drachir.getStrong(), imp.getStrong());
+				SetConsoleTextAttribute(hConsole, 2);
+				Drachir.setHealth(Drachir.getHealth() - battle);
 				if (Drachir.getHealth() == 0) break;
 				imp.setAlive(false);
+				SetConsoleTextAttribute(hConsole, 2);
 				Drachir.addItemToInventory(imp.getLoot());
 				Drachir.setStrong(powerOfHero(Drachir.getInventory()));
 			}
 			else {
 				if (imp.getAlive() == false)imp.deadImp();
 			}
-			skip_imp:
+		skip_imp:
+			SetConsoleTextAttribute(hConsole, 15);
 			gamemap.showMap(Drachir.getLocation()); // карта
+			SetConsoleTextAttribute(hConsole, 3);
 			Drachir.setLocation(imp.moveTo());
 			break;
 		case 3:
 			// переход в локацию эльфа
+			SetConsoleTextAttribute(hConsole, 15);
 			if (elf.getAlive()) {
 				elf.dialog(elf.getVisited());
 				if (!elf.getVisited()) {
 					elf.setVisited(true);
-					if (elf.choice()) Drachir.setReputation(Drachir.getReputation() + 5);
+					if (elf.choice()) {
+						SetConsoleTextAttribute(hConsole, 2);
+						Drachir.setReputation(Drachir.getReputation() + 5);
+					}
 					else {
+						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.setReputation(Drachir.getReputation() - 5);
 						elf.setAlive(false);
 					}
@@ -949,17 +970,24 @@ int main() {
 			}
 			else elf.deadElf();
 			if (Drachir.getHealth() == 0) break;
+			SetConsoleTextAttribute(hConsole, 15);
 			gamemap.showMap(Drachir.getLocation()); // карта
+			SetConsoleTextAttribute(hConsole, 3);
 			Drachir.setLocation(elf.moveTo());
 			break;
 		case 4:
 			// переход в локацию путника
+			SetConsoleTextAttribute(hConsole, 15);
 			if (traveler.getAlive()) {
 				traveler.dialog(traveler.getVisited());
 				if (!traveler.getVisited()) {
 					traveler.setVisited(true);
-					if (traveler.choice()) Drachir.setReputation(Drachir.getReputation() + 5);
+					if (traveler.choice()) {
+						SetConsoleTextAttribute(hConsole, 2);
+						Drachir.setReputation(Drachir.getReputation() + 5);
+					}
 					else {
+						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.setReputation(Drachir.getReputation() - 5);
 						traveler.setAlive(false);
 					}
@@ -967,11 +995,14 @@ int main() {
 			}
 			else traveler.deadTraveler();
 			if (Drachir.getHealth() == 0) break;
+			SetConsoleTextAttribute(hConsole, 15);
 			gamemap.showMap(Drachir.getLocation()); // карта
+			SetConsoleTextAttribute(hConsole, 3);
 			Drachir.setLocation(traveler.moveTo());
 			break;
 		case 5:
 			// переход в локацию сфинкса
+			SetConsoleTextAttribute(hConsole, 15);
 			if (sphinx.getAlive()) {
 				sphinx.dialog(sphinx.getVisited());
 				int choice;
@@ -985,6 +1016,7 @@ int main() {
 				switch (choice) {
 				case 1:
 					if (sphinx.riddles()) {
+						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.addItemToInventory(sphinx.getLoot());
 						Drachir.setStrong(powerOfHero(Drachir.getInventory()));
 					}
@@ -994,9 +1026,11 @@ int main() {
 					break;
 				case 2:
 					int battle = sphinx.attack(Drachir.getStrong(), sphinx.getStrong());
+					SetConsoleTextAttribute(hConsole, 2);
 					Drachir.setHealth(Drachir.getHealth() - battle);
 					if (battle == 0) {
 						sphinx.setAlive(false);
+						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.addItemToInventory(sphinx.getLoot());
 						Drachir.setStrong(powerOfHero(Drachir.getInventory()));
 					}
@@ -1005,11 +1039,14 @@ int main() {
 			}
 			else sphinx.deadSphinx();
 			if (Drachir.getHealth() == 0) break;
+			SetConsoleTextAttribute(hConsole, 15);
 			gamemap.showMap(Drachir.getLocation()); // карта
+			SetConsoleTextAttribute(hConsole, 3);
 			Drachir.setLocation(sphinx.moveTo());
 			break;
 		case 6:
 			// переход в локацию волшебницы
+			SetConsoleTextAttribute(hConsole, 15);
 			if (witch.getAlive()) {
 				witch.dialog(witch.getVisited());
 				int choice;
@@ -1023,9 +1060,8 @@ int main() {
 				switch (choice) {
 				case 1:
 					if (witch.riddles()) {
-						Drachir.addItemToInventory(witch.getLoot());
+						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.setInvisibility(true);
-						Drachir.setStrong(powerOfHero(Drachir.getInventory()));
 					}
 					else {
 						cout << "лох" << endl;
@@ -1033,24 +1069,27 @@ int main() {
 					break;
 				case 2:
 					int battle = witch.attack(Drachir.getStrong(), witch.getStrong());
+					SetConsoleTextAttribute(hConsole, 2);
 					Drachir.setHealth(Drachir.getHealth() - battle);
 					if (battle == 0) {
+						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.setReputation(Drachir.getReputation() - 5);
 						witch.setAlive(false);
-						Drachir.addItemToInventory(witch.getLoot());
 						Drachir.setInvisibility(true);
-						Drachir.setStrong(powerOfHero(Drachir.getInventory()));
 					}
 					break;
 				}
 			}
 			else witch.deadWitch();
 			if (Drachir.getHealth() == 0) break;
+			SetConsoleTextAttribute(hConsole, 15);
 			gamemap.showMap(Drachir.getLocation()); // карта
+			SetConsoleTextAttribute(hConsole, 3);
 			Drachir.setLocation(witch.moveTo());
 			break;
 		case 7:
 			// переход в локацию демона
+			SetConsoleTextAttribute(hConsole, 15);
 			if (demon.getAlive()) {
 				demon.dialog(demon.getVisited());
 				demon.setVisited(true);
@@ -1067,28 +1106,36 @@ int main() {
 				}
 
 				int battle = demon.attack(Drachir.getStrong(), demon.getStrong());
+				SetConsoleTextAttribute(hConsole, 2);
 				Drachir.setHealth(Drachir.getHealth() - battle);
 				if (battle == 0) {
 					demon.setAlive(false);
+					SetConsoleTextAttribute(hConsole, 2);
 					Drachir.addItemToInventory(demon.getLoot());
 					Drachir.setStrong(powerOfHero(Drachir.getInventory()));
 				}
 			}
 			else demon.deadDemon();
 			if (Drachir.getHealth() == 0) break;
-			skip_demon:
+		skip_demon:
+			SetConsoleTextAttribute(hConsole, 15);
 			gamemap.showMap(Drachir.getLocation()); // карта
+			SetConsoleTextAttribute(hConsole, 3);
 			Drachir.setLocation(demon.moveTo());
 			break;
 		case 8:
 			// переход в локацию сатаны
+			SetConsoleTextAttribute(hConsole, 15);
 			boss.dialog();
+			SetConsoleTextAttribute(hConsole, 2);
 			Drachir.setHealth(boss.attack(Drachir.getStrong(), boss.getStrong()));
 			if (Drachir.getHealth() == 0) break;
+			SetConsoleTextAttribute(hConsole, 3);
 			Drachir.setLocation(boss.moveTo());
 			break;
 		case 9:
 			// переход в локацию финиш
+			SetConsoleTextAttribute(hConsole, 15);
 			int final_rep = Drachir.getReputation();
 			if (final_rep > 5) {
 				finish.goodEnding();
@@ -1097,6 +1144,7 @@ int main() {
 				finish.badEnding();
 			}
 			else finish.nobodyEnding();
+			SetConsoleTextAttribute(hConsole, 12);
 			cout << "Вы прошли игру.\nХотите начать заново? Нажмите Enter\nХотите завершить игру? Нажмите Esc" << endl;
 			while (true) {
 				switch (_getch()) {
@@ -1111,6 +1159,7 @@ int main() {
 		}
 	}
 
+	SetConsoleTextAttribute(hConsole, 12);
 	cout << "Увы, Драчир пал смертью храбрых.\nХотите начать заново? Нажмите Enter\nХотите завершить игру? Нажмите Esc" << endl;
 	while (true) {
 		switch (_getch()) {
