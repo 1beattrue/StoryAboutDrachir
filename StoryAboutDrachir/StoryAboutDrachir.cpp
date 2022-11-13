@@ -924,6 +924,7 @@ int main() {
 				if (Drachir.getInvisibility()) {
 					SetConsoleTextAttribute(hConsole, 3);
 					cout << "Вы можете использовать магию невидимости, нажав 1, либо вступить в сражение, нажав любую другую клавишу" << endl;
+					SetConsoleTextAttribute(hConsole, 15);
 					switch (_getch()) {
 					case 49:
 						cout << "Вы стали незаметным для врага. Куда бежать?" << endl;
@@ -1106,6 +1107,7 @@ int main() {
 				if (Drachir.getInvisibility()) {
 					SetConsoleTextAttribute(hConsole, 3);
 					cout << "Вы можете использовать магию невидимости, нажав 1, либо вступить в сражение, нажав любую другую клавишу" << endl;
+					SetConsoleTextAttribute(hConsole, 15);
 					switch (_getch()) {
 					case 49:
 						cout << "Вы стали незаметным для врага. Куда бежать?" << endl;
@@ -1150,7 +1152,7 @@ int main() {
 			if (final_rep > 5) {
 				finish.goodEnding();
 			}
-			else if (final_rep < 10) {
+			else if (final_rep < -10) {
 				finish.badEnding();
 			}
 			else finish.nobodyEnding();
