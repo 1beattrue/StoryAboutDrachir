@@ -1326,11 +1326,13 @@ int main() {
 					elf.setVisited(true);
 					SetConsoleTextAttribute(hConsole, 3);
 					if (elf.choice()) {
+						SetConsoleTextAttribute(hConsole, 15);
 						elf.help();
 						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.setReputation(Drachir.getReputation() + 5);
 					}
 					else {
+						SetConsoleTextAttribute(hConsole, 15);
 						elf.ignore();
 						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.setReputation(Drachir.getReputation() - 5);
@@ -1354,10 +1356,14 @@ int main() {
 					traveler.setVisited(true);
 					SetConsoleTextAttribute(hConsole, 3);
 					if (traveler.choice()) {
+						SetConsoleTextAttribute(hConsole, 15);
+						traveler.help();
 						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.setReputation(Drachir.getReputation() + 5);
 					}
 					else {
+						SetConsoleTextAttribute(hConsole, 15);
+						traveler.ignore();
 						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.setReputation(Drachir.getReputation() - 5);
 						traveler.setAlive(false);
