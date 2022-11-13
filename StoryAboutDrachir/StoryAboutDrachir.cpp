@@ -878,7 +878,7 @@ int main() {
 									{"witch", 6},  {"demon", 7},
 									{"boss", 8},   {"finish", 9} };
 
-	Hero Drachir(3, 0, 0, false, "start", {});
+	Hero Drachir(2, 0, 0, false, "start", {});
 	Start start;
 	Info info(false);
 	Imp imp(9, "imp's pitchfork", false, true);
@@ -922,6 +922,7 @@ int main() {
 				imp.setVisited(true);
 
 				if (Drachir.getInvisibility()) {
+					SetConsoleTextAttribute(hConsole, 3);
 					cout << "Вы можете использовать магию невидимости, нажав 1, либо вступить в сражение, нажав любую другую клавишу" << endl;
 					switch (_getch()) {
 					case 49:
@@ -957,6 +958,7 @@ int main() {
 				elf.dialog(elf.getVisited());
 				if (!elf.getVisited()) {
 					elf.setVisited(true);
+					SetConsoleTextAttribute(hConsole, 3);
 					if (elf.choice()) {
 						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.setReputation(Drachir.getReputation() + 5);
@@ -982,6 +984,7 @@ int main() {
 				traveler.dialog(traveler.getVisited());
 				if (!traveler.getVisited()) {
 					traveler.setVisited(true);
+					SetConsoleTextAttribute(hConsole, 3);
 					if (traveler.choice()) {
 						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.setReputation(Drachir.getReputation() + 5);
@@ -1008,13 +1011,16 @@ int main() {
 				int choice;
 				if (!sphinx.getVisited()) {
 					sphinx.setVisited(true);
+					SetConsoleTextAttribute(hConsole, 3);
 					choice = sphinx.choice1();
 				}
 				else {
+					SetConsoleTextAttribute(hConsole, 3);
 					choice = sphinx.choice2();
 				}
 				switch (choice) {
 				case 1:
+					SetConsoleTextAttribute(hConsole, 15);
 					if (sphinx.riddles()) {
 						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.addItemToInventory(sphinx.getLoot());
@@ -1052,13 +1058,16 @@ int main() {
 				int choice;
 				if (!witch.getVisited()) {
 					witch.setVisited(true);
+					SetConsoleTextAttribute(hConsole, 3);
 					choice = witch.choice1();
 				}
 				else {
+					SetConsoleTextAttribute(hConsole, 3);
 					choice = witch.choice2();
 				}
 				switch (choice) {
 				case 1:
+					SetConsoleTextAttribute(hConsole, 15);
 					if (witch.riddles()) {
 						SetConsoleTextAttribute(hConsole, 2);
 						Drachir.setInvisibility(true);
@@ -1095,6 +1104,7 @@ int main() {
 				demon.setVisited(true);
 
 				if (Drachir.getInvisibility()) {
+					SetConsoleTextAttribute(hConsole, 3);
 					cout << "Вы можете использовать магию невидимости, нажав 1, либо вступить в сражение, нажав любую другую клавишу" << endl;
 					switch (_getch()) {
 					case 49:
