@@ -870,7 +870,7 @@ int main() {
 	setlocale(LC_ALL, "Russian");
 
 	restart:
-	// for (int i = 0; i < 100; i++) cout << "\n\n\n\n\n"; // костыль для очистки консоли
+	for (int i = 0; i < 100; i++) cout << "\n\n\n\n\n"; // костыль для очистки консоли
 	
 	map <string, int> locations = { {"start", 0},  {"info", 1},     // карта 
 									{"imp", 2},    {"elf", 3},
@@ -1162,6 +1162,7 @@ int main() {
 					goto restart;
 					break;
 				case 27:
+					SetConsoleTextAttribute(hConsole, 15);
 					exit(0);
 				}
 			}
@@ -1177,6 +1178,7 @@ int main() {
 			goto restart;
 			break;
 		case 27:
+			SetConsoleTextAttribute(hConsole, 15);
 			exit(0);
 		}
 	}
