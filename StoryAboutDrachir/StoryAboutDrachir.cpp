@@ -89,9 +89,8 @@ public:
 	void gameDescription() {
 		ifstream fin("gameDescription.txt");
 		string s;
-		getline(fin, s);
-		cout << s << endl;
 		while (getline(fin, s)) {
+			cout << s << endl;
 			cout << "Нажмите space, чтобы продолжть" << endl;
 			bool flag = true;
 			while (flag) {
@@ -101,7 +100,6 @@ public:
 					break;
 				}
 			}
-			cout << s << endl;
 		}
 		fin.close();
 	}
@@ -114,9 +112,8 @@ public:
 	void nobodyEnding() {
 		ifstream fin_nobody_end("nobodyEnding.txt");
 		string s;
-		getline(fin_nobody_end, s);
-		cout << s << endl;
 		while (getline(fin_nobody_end, s)) {
+			cout << s << endl;
 			cout << "Нажмите space, чтобы продолжть" << endl;
 			bool flag = true;
 			while (flag) {
@@ -126,7 +123,6 @@ public:
 					break;
 				}
 			}
-			cout << s << endl;
 		}
 		fin_nobody_end.close();
 	}
@@ -134,9 +130,8 @@ public:
 	void badEnding() {
 		ifstream fin_bad_end("badEnding.txt");
 		string s;
-		getline(fin_bad_end, s);
-		cout << s << endl;
 		while (getline(fin_bad_end, s)) {
+			cout << s << endl;
 			cout << "Нажмите space, чтобы продолжть" << endl;
 			bool flag = true;
 			while (flag) {
@@ -146,7 +141,6 @@ public:
 					break;
 				}
 			}
-			cout << s << endl;
 		}
 		fin_bad_end.close();
 	}
@@ -154,9 +148,8 @@ public:
 	void goodEnding() {
 		ifstream fin_good_end("goodEnding.txt");
 		string s;
-		getline(fin_good_end, s);
-		cout << s << endl;
 		while (getline(fin_good_end, s)) {
+			cout << s << endl;
 			cout << "Нажмите space, чтобы продолжть" << endl;
 			bool flag = true;
 			while (flag) {
@@ -166,7 +159,6 @@ public:
 					break;
 				}
 			}
-			cout << s << endl;
 		}
 		fin_good_end.close();
 	}
@@ -183,11 +175,10 @@ public:
 
 	void dialog(bool visit) {
 		if (!visit) {
-			ifstream fin1("infoDialog.txt");
+			ifstream fin_info("infoDialog.txt");
 			string s;
-			getline(fin1, s);
-			cout << s << endl;
-			while (getline(fin1, s)) {
+			while (getline(fin_info, s)) {
+				cout << s << endl;
 				cout << "Нажмите space, чтобы продолжть" << endl;
 				bool flag = true;
 				while (flag) {
@@ -197,12 +188,25 @@ public:
 						break;
 					}
 				}
-				cout << s << endl;
 			}
-			fin1.close();
+			fin_info.close();
 		}
 		else {
-			cout << "я мудрец и ты уже был здесь" << endl;
+			ifstream fin_info_visited("infoVisitedDialog.txt");
+			string s;
+			while (getline(fin_info_visited, s)) {
+				cout << s << endl;
+				cout << "Нажмите space, чтобы продолжть" << endl;
+				bool flag = true;
+				while (flag) {
+					switch (_getch()) {
+					case 32:
+						flag = false;
+						break;
+					}
+				}
+			}
+			fin_info_visited.close();
 		}
 	}
 
@@ -246,15 +250,16 @@ public:
 	int attack(int hero_strong, int enemy_strong) {
 		double win_chance_percent = ((double)hero_strong / enemy_strong) * 100;
 		win_chance_percent = (int)win_chance_percent;
+		if (win_chance_percent > 100) win_chance_percent = 100;
 		int rnd = rand() % 100;
-		cout << win_chance_percent << endl;
-		cout << rnd << endl;
+		cout << "Вероятность победы: " << win_chance_percent << "%" << endl;
+		// cout << rnd << endl;
 		if (win_chance_percent < rnd) {
-			cout << "поражение" << endl;
+			cout << "ПОРАЖЕНИЕ" << endl;
 			return 1;
 		}
 		else {
-			cout << "победа" << endl;
+			cout << "ПОБЕДА" << endl;
 			return 0;
 		}
 	}
@@ -298,11 +303,39 @@ public:
 	}
 
 	void dialog() {
-		cout << "я имп" << endl;
+		ifstream imp_dialog("impDialog.txt");
+		string s;
+		while (getline(imp_dialog, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		imp_dialog.close();
 	}
 
 	void deadImp() {
-		cout << "я мертвый имп" << endl;
+		ifstream imp_dead_dialog("impDeadDialog.txt");
+		string s;
+		while (getline(imp_dead_dialog, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		imp_dead_dialog.close();
 	}
 
 	string moveTo() {
@@ -339,10 +372,38 @@ public:
 
 	void dialog(bool visit) {
 		if (!visit) {
-			cout << "я сфинкс" << endl;
+			ifstream sphinx_dialog("sphinxDialog.txt");
+			string s;
+			while (getline(sphinx_dialog, s)) {
+				cout << s << endl;
+				cout << "Нажмите space, чтобы продолжть" << endl;
+				bool flag = true;
+				while (flag) {
+					switch (_getch()) {
+					case 32:
+						flag = false;
+						break;
+					}
+				}
+			}
+			sphinx_dialog.close();
 		}
 		else {
-			cout << "я сфинкс и ты уже был здесь" << endl;
+			ifstream sphinx_visited_dialog("sphinxVisitedDialog.txt");
+			string s;
+			while (getline(sphinx_visited_dialog, s)) {
+				cout << s << endl;
+				cout << "Нажмите space, чтобы продолжть" << endl;
+				bool flag = true;
+				while (flag) {
+					switch (_getch()) {
+					case 32:
+						flag = false;
+						break;
+					}
+				}
+			}
+			sphinx_visited_dialog.close();
 		}
 	}
 
@@ -385,19 +446,25 @@ public:
 	}
 
 	bool riddles() {
-		cout << "Загадка 1 (ответ 1)" << endl;
+		ifstream sphinx_riddles("sphinxRiddles");
+		string quest1, quest2, quest3;
+		getline(sphinx_riddles, quest1);
+		getline(sphinx_riddles, quest2);
+		getline(sphinx_riddles, quest3);
+		sphinx_riddles.close();
+		cout << quest1 << endl;
 		string right_ans1 = "1";
 		string user_ans1;
 		cin >> user_ans1;
 		if (user_ans1 != right_ans1) return false;
 
-		cout << "Загадка 2 (ответ 2)" << endl;
+		cout << quest2 << endl;
 		string right_ans2 = "2";
 		string user_ans2;
 		cin >> user_ans2;
 		if (user_ans2 != right_ans2) return false;
 
-		cout << "Загадка 3 (ответ 3)" << endl;
+		cout << quest3 << endl;
 		string right_ans3 = "3";
 		string user_ans3;
 		cin >> user_ans3;
@@ -407,7 +474,21 @@ public:
 	}
 
 	void deadSphinx() {
-		cout << "я мертвый сфинкс" << endl;
+		ifstream sphinx_dead_dialog("sphinxDeadDialog.txt");
+		string s;
+		while (getline(sphinx_dead_dialog, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		sphinx_dead_dialog.close();
 	}
 
 	string moveTo() {
@@ -448,15 +529,57 @@ public:
 
 	void dialog(bool visit) {
 		if (!visit) {
-			cout << "я демон" << endl;
+			ifstream demon_dialog("demonDialog.txt");
+			string s;
+			while (getline(demon_dialog, s)) {
+				cout << s << endl;
+				cout << "Нажмите space, чтобы продолжть" << endl;
+				bool flag = true;
+				while (flag) {
+					switch (_getch()) {
+					case 32:
+						flag = false;
+						break;
+					}
+				}
+			}
+			demon_dialog.close();
 		}
 		else {
-			cout << "я демон и ты уже был здесь" << endl;
+			ifstream demon_visited_dialog("demonVisitedDialog.txt");
+			string s;
+			while (getline(demon_visited_dialog, s)) {
+				cout << s << endl;
+				cout << "Нажмите space, чтобы продолжть" << endl;
+				bool flag = true;
+				while (flag) {
+					switch (_getch()) {
+					case 32:
+						flag = false;
+						break;
+					}
+				}
+			}
+			demon_visited_dialog.close();
 		}
 	}
 
 	void deadDemon() {
-		cout << "я мертвый демон" << endl;
+		ifstream demon_dead_dialog("demonDeadDialog.txt");
+		string s;
+		while (getline(demon_dead_dialog, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		demon_dead_dialog.close();
 	}
 
 	string moveTo() {
@@ -497,10 +620,38 @@ public:
 
 	void dialog(bool visit) {
 		if (!visit) {
-			cout << "я ведьма" << endl;
+			ifstream witch_dialog("witchDialog.txt");
+			string s;
+			while (getline(witch_dialog, s)) {
+				cout << s << endl;
+				cout << "Нажмите space, чтобы продолжть" << endl;
+				bool flag = true;
+				while (flag) {
+					switch (_getch()) {
+					case 32:
+						flag = false;
+						break;
+					}
+				}
+			}
+			witch_dialog.close();
 		}
 		else {
-			cout << "я ведьма и ты уже был здесь" << endl;
+			ifstream witch_visited_dialog("witchVisitedDialog.txt");
+			string s;
+			while (getline(witch_visited_dialog, s)) {
+				cout << s << endl;
+				cout << "Нажмите space, чтобы продолжть" << endl;
+				bool flag = true;
+				while (flag) {
+					switch (_getch()) {
+					case 32:
+						flag = false;
+						break;
+					}
+				}
+			}
+			witch_visited_dialog.close();
 		}
 	}
 
@@ -543,19 +694,25 @@ public:
 	}
 
 	bool riddles() {
-		cout << "Загадка 1 (ответ 1)" << endl;
+		ifstream witch_riddles("witchRiddles");
+		string quest1, quest2, quest3;
+		getline(witch_riddles, quest1);
+		getline(witch_riddles, quest2);
+		getline(witch_riddles, quest3);
+		witch_riddles.close();
+		cout << quest1 << endl;
 		string right_ans1 = "1";
 		string user_ans1;
 		cin >> user_ans1;
 		if (user_ans1 != right_ans1) return false;
 
-		cout << "Загадка 2 (ответ 2)" << endl;
+		cout << quest2 << endl;
 		string right_ans2 = "2";
 		string user_ans2;
 		cin >> user_ans2;
 		if (user_ans2 != right_ans2) return false;
 
-		cout << "Загадка 3 (ответ 3)" << endl;
+		cout << quest3 << endl;
 		string right_ans3 = "3";
 		string user_ans3;
 		cin >> user_ans3;
@@ -565,7 +722,21 @@ public:
 	}
 
 	void deadWitch() {
-		cout << "я мертвая ведьма" << endl;
+		ifstream witch_dead_dialog("witchDeadDialog.txt");
+		string s;
+		while (getline(witch_dead_dialog, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		witch_dead_dialog.close();
 	}
 
 	string moveTo() {
@@ -629,10 +800,38 @@ public:
 
 	void dialog(bool visit) {
 		if (!visit) {
-			cout << "я путник" << endl;
+			ifstream traveler_dialog("travelerDialog.txt");
+			string s;
+			while (getline(traveler_dialog, s)) {
+				cout << s << endl;
+				cout << "Нажмите space, чтобы продолжть" << endl;
+				bool flag = true;
+				while (flag) {
+					switch (_getch()) {
+					case 32:
+						flag = false;
+						break;
+					}
+				}
+			}
+			traveler_dialog.close();
 		}
 		else {
-			cout << "я путник и ты уже был здесь" << endl;
+			ifstream traveler_visited_dialog("travelerVisitedDialog.txt");
+			string s;
+			while (getline(traveler_visited_dialog, s)) {
+				cout << s << endl;
+				cout << "Нажмите space, чтобы продолжть" << endl;
+				bool flag = true;
+				while (flag) {
+					switch (_getch()) {
+					case 32:
+						flag = false;
+						break;
+					}
+				}
+			}
+			traveler_visited_dialog.close();
 		}
 	}
 
@@ -655,7 +854,21 @@ public:
 	}
 
 	void deadTraveler() {
-		cout << "я мертвый путник" << endl;
+		ifstream traveler_dead_dialog("travelerDeadDialog.txt");
+		string s;
+		while (getline(traveler_dead_dialog, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		traveler_dead_dialog.close();
 	}
 
 	string moveTo() {
@@ -694,10 +907,38 @@ public:
 
 	void dialog(bool visit) {
 		if (!visit) {
-			cout << "я эльф" << endl;
+			ifstream elf_dialog("elfDialog.txt");
+			string s;
+			while (getline(elf_dialog, s)) {
+				cout << s << endl;
+				cout << "Нажмите space, чтобы продолжть" << endl;
+				bool flag = true;
+				while (flag) {
+					switch (_getch()) {
+					case 32:
+						flag = false;
+						break;
+					}
+				}
+			}
+			elf_dialog.close();
 		}
 		else {
-			cout << "я эльф и ты уже был здесь" << endl;
+			ifstream elf_visited_dialog("elfVisitedDialog.txt");
+			string s;
+			while (getline(elf_visited_dialog, s)) {
+				cout << s << endl;
+				cout << "Нажмите space, чтобы продолжть" << endl;
+				bool flag = true;
+				while (flag) {
+					switch (_getch()) {
+					case 32:
+						flag = false;
+						break;
+					}
+				}
+			}
+			elf_visited_dialog.close();
 		}
 	}
 
@@ -720,7 +961,21 @@ public:
 	}
 
 	void deadElf() {
-		cout << "я мертвый эльф" << endl;
+		ifstream elf_dead_dialog("elfDeadDialog.txt");
+		string s;
+		while (getline(elf_dead_dialog, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		elf_dead_dialog.close();
 	}
 
 	string moveTo() {
@@ -758,15 +1013,16 @@ public:
 	int attack(int hero_strong, int enemy_strong) {
 		double win_chance_percent = ((double)hero_strong / enemy_strong) * 100;
 		win_chance_percent = (int)win_chance_percent;
+		if (win_chance_percent > 100) win_chance_percent = 100;
 		int rnd = rand() % 100;
-		cout << win_chance_percent << endl;
-		cout << rnd << endl;
+		cout << "Вероятность победы: " << win_chance_percent << "%" << endl;
+		// cout << rnd << endl;
 		if (win_chance_percent < rnd) {
-			cout << "поражение" << endl;
+			cout << "ПОРАЖЕНИЕ" << endl;
 			return 0;
 		}
 		else {
-			cout << "победа" << endl;
+			cout << "ПОБЕДА" << endl;
 			return 1;
 		}
 	}
@@ -776,11 +1032,39 @@ public:
 	}
 
 	void dialog() {
-		cout << "я босс" << endl;
+		ifstream satan_dialog("satanDialog.txt");
+		string s;
+		while (getline(satan_dialog, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		satan_dialog.close();
 	}
 
 	void deadBoss() {
-		cout << "вы убили босса" << endl;
+		ifstream satan_dead_dialog("satanDeadDialog.txt");
+		string s;
+		while (getline(satan_dead_dialog, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		satan_dead_dialog.close();
 	}
 
 	string moveTo() {
@@ -857,7 +1141,7 @@ int powerOfHero(vector <string> arg) {
 								{"silver sword", 50},
 								{"demon armor", 50} };
 	int p = 0;
-	cout << "Ваш инвентарь:" << endl;
+	cout << "Ваш инвентарь: " << endl;
 	for (string x : arg) {
 		p += items[x];
 		cout << x << endl;
@@ -934,6 +1218,7 @@ int main() {
 						break;
 					}
 				}
+				SetConsoleTextAttribute(hConsole, 15);
 				int battle = imp.attack(Drachir.getStrong(), imp.getStrong());
 				SetConsoleTextAttribute(hConsole, 2);
 				Drachir.setHealth(Drachir.getHealth() - battle);
@@ -1032,6 +1317,7 @@ int main() {
 					}
 					break;
 				case 2:
+					SetConsoleTextAttribute(hConsole, 15);
 					int battle = sphinx.attack(Drachir.getStrong(), sphinx.getStrong());
 					SetConsoleTextAttribute(hConsole, 2);
 					Drachir.setHealth(Drachir.getHealth() - battle);
@@ -1078,6 +1364,7 @@ int main() {
 					}
 					break;
 				case 2:
+					SetConsoleTextAttribute(hConsole, 15);
 					int battle = witch.attack(Drachir.getStrong(), witch.getStrong());
 					SetConsoleTextAttribute(hConsole, 2);
 					Drachir.setHealth(Drachir.getHealth() - battle);
@@ -1116,7 +1403,7 @@ int main() {
 						break;
 					}
 				}
-
+				SetConsoleTextAttribute(hConsole, 15);
 				int battle = demon.attack(Drachir.getStrong(), demon.getStrong());
 				SetConsoleTextAttribute(hConsole, 2);
 				Drachir.setHealth(Drachir.getHealth() - battle);
@@ -1139,10 +1426,9 @@ int main() {
 			// переход в локацию сатаны
 			SetConsoleTextAttribute(hConsole, 15);
 			boss.dialog();
-			SetConsoleTextAttribute(hConsole, 2);
 			Drachir.setHealth(boss.attack(Drachir.getStrong(), boss.getStrong()));
 			if (Drachir.getHealth() == 0) break;
-			SetConsoleTextAttribute(hConsole, 3);
+			SetConsoleTextAttribute(hConsole, 15);
 			Drachir.setLocation(boss.moveTo());
 			break;
 		case 9:
