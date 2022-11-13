@@ -412,6 +412,24 @@ public:
 		}
 	}
 
+	void attackDialog() {
+		ifstream sphinx_attack_dialog("sphinxAttackDialog.txt");
+		string s;
+		while (getline(sphinx_attack_dialog, s)) {
+			cout << s << endl;
+			cout << "Нажмите space, чтобы продолжть" << endl;
+			bool flag = true;
+			while (flag) {
+				switch (_getch()) {
+				case 32:
+					flag = false;
+					break;
+				}
+			}
+		}
+		sphinx_attack_dialog.close();
+	}
+
 	int choice1() {
 		cout << "Отгадать загадки или убить?" << endl;
 		cout << "Нажмите 1, чтобы начать отгадывать загадки" << endl;
@@ -451,28 +469,27 @@ public:
 	}
 
 	bool riddles() {
-		ifstream sphinx_riddles("sphinxRiddles");
+		ifstream sphinx_riddles("sphinxRiddles.txt");
 		string quest1, quest2, quest3;
 		getline(sphinx_riddles, quest1);
-		getline(sphinx_riddles, quest2);
-		getline(sphinx_riddles, quest3);
-		sphinx_riddles.close();
 		cout << quest1 << endl;
 		string right_ans1 = "1";
 		string user_ans1;
 		cin >> user_ans1;
 		if (user_ans1 != right_ans1) return false;
-
+		getline(sphinx_riddles, quest2);
 		cout << quest2 << endl;
 		string right_ans2 = "2";
 		string user_ans2;
 		cin >> user_ans2;
 		if (user_ans2 != right_ans2) return false;
-
+		getline(sphinx_riddles, quest3);
 		cout << quest3 << endl;
 		string right_ans3 = "3";
 		string user_ans3;
 		cin >> user_ans3;
+
+		sphinx_riddles.close();
 		if (user_ans3 != right_ans3) return false;
 
 		return true;
@@ -1406,7 +1423,9 @@ int main() {
 					break;
 				case 2:
 					SetConsoleTextAttribute(hConsole, 15);
+					sphinx.attackDialog();
 					int battle = sphinx.attack(Drachir.getStrong(), sphinx.getStrong());
+					if (battle == 0) cout << "*Сфинкс умер от кринжа. Ваша тупость оказалась сильнее камня*" << endl;
 					SetConsoleTextAttribute(hConsole, 2);
 					Drachir.setHealth(Drachir.getHealth() - battle);
 					if (battle == 0) {
