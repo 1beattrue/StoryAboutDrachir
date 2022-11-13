@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <windows.h>
+#include <random>
 using namespace std;
 
 class Hero {
@@ -251,7 +252,11 @@ public:
 		double win_chance_percent = ((double)hero_strong / enemy_strong) * 100;
 		win_chance_percent = (int)win_chance_percent;
 		if (win_chance_percent > 100) win_chance_percent = 100;
-		int rnd = rand() % 100;
+		// int rnd = rand() % 100;
+		std::random_device dev;
+		std::mt19937 rng(dev());
+		std::uniform_int_distribution<std::mt19937::result_type> dist100(0, 99); // distribution in range [1, 99]
+		int rnd = dist100(rng);
 		cout << "Вероятность победы: " << win_chance_percent << "%" << endl;
 		// cout << rnd << endl;
 		if (win_chance_percent < rnd) {
@@ -1014,7 +1019,10 @@ public:
 		double win_chance_percent = ((double)hero_strong / enemy_strong) * 100;
 		win_chance_percent = (int)win_chance_percent;
 		if (win_chance_percent > 100) win_chance_percent = 100;
-		int rnd = rand() % 100;
+		std::random_device dev;
+		std::mt19937 rng(dev());
+		std::uniform_int_distribution<std::mt19937::result_type> dist100(0, 99); // distribution in range [1, 99]
+		int rnd = dist100(rng);
 		cout << "Вероятность победы: " << win_chance_percent << "%" << endl;
 		// cout << rnd << endl;
 		if (win_chance_percent < rnd) {
