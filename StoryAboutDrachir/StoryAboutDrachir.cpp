@@ -733,6 +733,7 @@ public:
 	}
 
 	bool riddles() {
+		cout << "*Ответ на загадку - одно слово, на английском языке(ведьма не говорит по русски), строчными буквами*" << endl;
 		ifstream witch_riddles("witchRiddles.txt");
 		string quest1, quest2, quest3;
 		getline(witch_riddles, quest1);
