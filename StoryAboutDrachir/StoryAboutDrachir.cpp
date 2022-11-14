@@ -1316,9 +1316,6 @@ int main() {
 			// переход в локацию импа
 			SetConsoleTextAttribute(hConsole, 15);
 			if (!imp.getVisited()) {
-				imp.dialog();
-				imp.setVisited(true);
-
 				if (Drachir.getInvisibility()) {
 					SetConsoleTextAttribute(hConsole, 3);
 					cout << "Вы можете использовать магию невидимости, нажав 1, либо вступить в сражение, нажав любую другую клавишу" << endl;
@@ -1332,6 +1329,8 @@ int main() {
 						break;
 					}
 				}
+				imp.dialog();
+				imp.setVisited(true);
 				SetConsoleTextAttribute(hConsole, 15);
 				int battle = imp.attack(Drachir.getStrong(), imp.getStrong());
 				SetConsoleTextAttribute(hConsole, 2);
@@ -1513,11 +1512,9 @@ int main() {
 			// переход в локацию демона
 			SetConsoleTextAttribute(hConsole, 15);
 			if (demon.getAlive()) {
-				demon.dialog(demon.getVisited());
-				demon.setVisited(true);
-
 				if (Drachir.getInvisibility()) {
 					SetConsoleTextAttribute(hConsole, 3);
+					if (Drachir.getStrong() < demon.getStrong()) cout << "Ваших сил может оказаться недостаточно для встречи с врагом" << endl;
 					cout << "Вы можете использовать магию невидимости, нажав 1, либо вступить в сражение, нажав любую другую клавишу" << endl;
 					SetConsoleTextAttribute(hConsole, 15);
 					switch (_getch()) {
@@ -1528,6 +1525,8 @@ int main() {
 						break;
 					}
 				}
+				demon.dialog(demon.getVisited());
+				demon.setVisited(true);
 				SetConsoleTextAttribute(hConsole, 15);
 				int battle = demon.attack(Drachir.getStrong(), demon.getStrong());
 				SetConsoleTextAttribute(hConsole, 2);
