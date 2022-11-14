@@ -1137,7 +1137,6 @@ public:
 			return 0;
 		}
 		else {
-			cout << "ПОБЕДА" << endl;
 			return 1;
 		}
 	}
@@ -1183,7 +1182,7 @@ public:
 	}
 
 	string moveTo() {
-		cout << "Для продолжения нажмите space" << endl;
+		cout << "Нажмите space, чтобы продолжть" << endl;
 		while (true) {
 			switch (_getch()) {
 			case 32:
