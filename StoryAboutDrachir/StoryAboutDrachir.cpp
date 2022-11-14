@@ -1552,6 +1552,7 @@ int main() {
 			// переход в локацию сатаны
 			SetConsoleTextAttribute(hConsole, 15);
 			boss.dialog();
+			cout << "..." << endl;
 			Drachir.setHealth(boss.attack(Drachir.getStrong(), boss.getStrong()));
 			if (Drachir.getHealth() == 0) break;
 			SetConsoleTextAttribute(hConsole, 15);
@@ -1563,11 +1564,15 @@ int main() {
 			int final_rep = Drachir.getReputation();
 			if (final_rep > 5) {
 				finish.goodEnding();
+				if (witch.getAlive() && witch.getVisited()) cout << "Я женился на прекрасной волшебнице Йеннифер и жил с ней долго и счастливо." << endl;
 			}
 			else if (final_rep < -10) {
 				finish.badEnding();
 			}
-			else finish.nobodyEnding();
+			else {
+				finish.nobodyEnding();
+				if (witch.getAlive() && witch.getVisited()) cout << "*Поговаривали, что он взял в жены ведьму и прожил с ней всю оставшуюся жизнь...*" << endl;
+			}
 			SetConsoleTextAttribute(hConsole, 12);
 			cout << "Вы прошли игру.\nХотите начать заново? Нажмите Enter\nХотите завершить игру? Нажмите Esc" << endl;
 			while (true) {
