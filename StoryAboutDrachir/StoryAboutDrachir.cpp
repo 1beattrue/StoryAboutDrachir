@@ -1434,7 +1434,7 @@ int main() {
 						Drachir.setStrong(powerOfHero(Drachir.getInventory()));
 					}
 					else {
-						cout << "лох" << endl;
+						cout << "Вы ответили неправильно" << endl;
 					}
 					break;
 				case 2:
@@ -1483,7 +1483,7 @@ int main() {
 						Drachir.setInvisibility(true);
 					}
 					else {
-						cout << "лох" << endl;
+						cout << "Вы ответили неправильно" << endl;
 					}
 					break;
 				case 2:
