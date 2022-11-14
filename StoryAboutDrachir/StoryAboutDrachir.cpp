@@ -469,29 +469,28 @@ public:
 	}
 
 	bool riddles() {
+		cout << "*Ответ на загадку - одно слово, на английском языке(сфинкс не говорит по русски), строчными буквами*" << endl;
 		ifstream sphinx_riddles("sphinxRiddles.txt");
 		string quest1, quest2, quest3;
 		getline(sphinx_riddles, quest1);
 		cout << quest1 << endl;
-		string right_ans1 = "1";
+		string right_ans1 = "human";
 		string user_ans1;
 		cin >> user_ans1;
 		if (user_ans1 != right_ans1) return false;
 		getline(sphinx_riddles, quest2);
 		cout << quest2 << endl;
-		string right_ans2 = "2";
+		string right_ans2 = "mountain";
 		string user_ans2;
 		cin >> user_ans2;
 		if (user_ans2 != right_ans2) return false;
 		getline(sphinx_riddles, quest3);
 		cout << quest3 << endl;
-		string right_ans3 = "3";
+		string right_ans3 = "time";
 		string user_ans3;
 		cin >> user_ans3;
-
-		sphinx_riddles.close();
 		if (user_ans3 != right_ans3) return false;
-
+		sphinx_riddles.close();
 		return true;
 	}
 
@@ -741,19 +740,19 @@ public:
 		getline(witch_riddles, quest3);
 		witch_riddles.close();
 		cout << quest1 << endl;
-		string right_ans1 = "1";
+		string right_ans1 = "secret";
 		string user_ans1;
 		cin >> user_ans1;
 		if (user_ans1 != right_ans1) return false;
 
 		cout << quest2 << endl;
-		string right_ans2 = "2";
+		string right_ans2 = "death";
 		string user_ans2;
 		cin >> user_ans2;
 		if (user_ans2 != right_ans2) return false;
 
 		cout << quest3 << endl;
-		string right_ans3 = "3";
+		string right_ans3 = "age";
 		string user_ans3;
 		cin >> user_ans3;
 		if (user_ans3 != right_ans3) return false;
